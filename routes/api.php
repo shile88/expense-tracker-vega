@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\AccountController;
+use App\Http\Controllers\Api\ExpenseController;
+use App\Http\Controllers\Api\ExpenseGroupController;
 use App\Http\Controllers\Api\IncomeController;
 use App\Http\Controllers\Api\IncomeGroupController;
 
@@ -23,8 +25,13 @@ Route::middleware('auth:sanctum')->group(function() {
         //Account routes
         Route::apiResource('/accounts', AccountController::class)->except(['store', 'index']);
       
-        //Income groups routes
+        //Incomes routes
         Route::apiResource('/accounts/{account}/income-groups', IncomeGroupController::class);
         Route::apiResource('/accounts/{account}/income-groups/{income_group}/incomes', IncomeController::class);
+
+        //Expenses routes
+        Route::apiResource('/accounts/{account}/expense-groups', ExpenseGroupController::class);
+        Route::apiResource('/accounts/{account}/expense-groups/{expense_group}/expenses', ExpenseController::class);
     });
 });
+

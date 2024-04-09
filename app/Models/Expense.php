@@ -9,6 +9,16 @@ class Expense extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $fillable = ['expense_group_id', 'amount', 'schedule_id', 'expense_date'];
+
+    public function schedule()
+    {
+        return $this->belongsTo(Schedule::class);
+    }
+
+    public function expenseGroup()
+    {
+        return $this->belongsTo(ExpenseGroup::class);
+    }
 
 }
