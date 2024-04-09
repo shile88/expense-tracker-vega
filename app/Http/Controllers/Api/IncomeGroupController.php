@@ -8,6 +8,7 @@ use App\Http\Resources\IncomeGroupResource;
 use App\Models\Account;
 use App\Models\IncomeGroup;
 use App\Services\IncomeGroupService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 class IncomeGroupController extends Controller
@@ -18,7 +19,7 @@ class IncomeGroupController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Account $account)
+    public function index(Account $account): JsonResponse
     {
         $incomeGroups = $this->incomeGroupService->index($account);
 
@@ -47,9 +48,11 @@ class IncomeGroupController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreIncomeGroupRequest $request, Account $account)
+    public function store(StoreIncomeGroupRequest $request, Account $account): JsonResponse
     {
-        $newIncomeGroup = $this->incomeGroupService->store($request, $account);
+        $validatedRequest = $request->validated();
+
+        $newIncomeGroup = $this->incomeGroupService->store($validatedRequest, $account);
 
         return response()->json([
             'success' => true,
@@ -61,7 +64,7 @@ class IncomeGroupController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Account $account, IncomeGroup $incomeGroup)
+    public function show(Account $account, IncomeGroup $incomeGroup): JsonResponse
     {
         $incomeGroup = $this->incomeGroupService->show($incomeGroup);
 
@@ -75,9 +78,11 @@ class IncomeGroupController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateIncomeGroupRequest $request, Account $account, IncomeGroup $incomeGroup)
+    public function update(UpdateIncomeGroupRequest $request, Account $account, IncomeGroup $incomeGroup): JsonResponse
     {
-        $updatedIncomeGroup = $this->incomeGroupService->update($request, $incomeGroup);
+        $validatedRequest = $request->validated();
+
+        $updatedIncomeGroup = $this->incomeGroupService->update($validatedRequest, $incomeGroup);
 
         return response()->json([
             'success' => true,
@@ -89,7 +94,7 @@ class IncomeGroupController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Account $account, IncomeGroup $incomeGroup)
+    public function destroy(Account $account, IncomeGroup $incomeGroup): JsonResponse
     {
         $this->incomeGroupService->delete($incomeGroup);
 

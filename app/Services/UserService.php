@@ -4,22 +4,21 @@ namespace App\Services;
 
 use App\Events\UserRegistered;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserService
 {
 
-    public function register($request)
+    public function register(array $validatedRequest): User
     {
-        $validated = $request->validated();
-
         $user = User::create(
             [
-                'name' => $validated['name'],
-                'email' => $validated['email'],
-                'password' => Hash::make($validated['password']),
-                'type' => $validated['type'] ?? 'basic'
+                'name' => $validatedRequest['name'],
+                'email' => $validatedRequest['email'],
+                'password' => Hash::make($validatedRequest['password']),
+                'type' => $validatedRequest['type'] ?? 'basic'
             ]
         );
 
@@ -28,11 +27,9 @@ class UserService
         return $user;
     }
 
-    public function login($request)
+    public function login($validatedRequest): array|bool
     {
-        $credentials = $request->validated();
-
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($validatedRequest)) {
             $user = auth()->user();
 
             $token = $user->type === 'basic' ?
@@ -45,7 +42,7 @@ class UserService
         return false;
     }
 
-    public function logout()
+    public function logout(): void
     {
         auth()->user()->tokens()->delete();
     }

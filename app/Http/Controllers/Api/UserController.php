@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserRegisterRequest;
 use App\Services\UserService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 class UserController extends Controller
@@ -13,9 +14,11 @@ class UserController extends Controller
     {
     }
 
-    public function register(UserRegisterRequest $request)
+    public function register(UserRegisterRequest $request): JsonResponse
     {
-        $newUser = $this->userService->register($request);
+        $validatedRequest = $request->validated();
+
+        $newUser = $this->userService->register($validatedRequest);
 
         if ($newUser)
             return response()->json([
@@ -27,9 +30,11 @@ class UserController extends Controller
             ], Response::HTTP_OK);
     }
 
-    public function login(UserLoginRequest $request)
+    public function login(UserLoginRequest $request): JsonResponse
     {
-        $data = $this->userService->login($request);
+        $validatedRequest = $request->validated();
+
+        $data = $this->userService->login($validatedRequest);
 
         if ($data) {
             [$user, $token] = $data;
@@ -50,7 +55,7 @@ class UserController extends Controller
         }
     }
 
-    public function logout()
+    public function logout(): JsonResponse
     {
         $this->userService->logout();
 

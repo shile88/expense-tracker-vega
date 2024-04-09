@@ -7,8 +7,10 @@ use App\Http\Requests\UpdateAccountRequest;
 use App\Http\Resources\AccountResource;
 use App\Models\Account;
 use App\Services\AccountService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
+use Exception;
 
 class AccountController extends Controller
 {
@@ -16,37 +18,39 @@ class AccountController extends Controller
     {
     }
 
-    public function index()
+    public function index(): JsonResponse
     {
-        $myAccounts = $this->accountService->index();
+            $myAccounts = $this->accountService->index();
 
-        if ($myAccounts)
-            return response()->json([
-                'success' => true,
-                'message' => 'All my accounts.',
-                'data' => [
-                    'accounts' => AccountResource::collection($myAccounts),
-                    'pagination' => [
-                        'total' => $myAccounts['total'],
-                        'per_page' => $myAccounts['perPage'],
-                        'current_page' => $myAccounts['currentPage'],
-                        'last_page' => $myAccounts['lastPage']
+            if ($myAccounts)
+                return response()->json([
+                    'success' => true,
+                    'message' => 'All my accounts.',
+                    'data' => [
+                        'accounts' => AccountResource::collection($myAccounts),
+                        'pagination' => [
+                            'total' => $myAccounts['total'],
+                            'per_page' => $myAccounts['perPage'],
+                            'current_page' => $myAccounts['currentPage'],
+                            'last_page' => $myAccounts['lastPage']
+                        ]
                     ]
-                ]
-            ], Response::HTTP_OK);
-        else
-            return response()->json([
-                'success' => true,
-                'message' => 'This user has no accounts.',
-                'data' => []
-            ],  Response::HTTP_OK);
+                ], Response::HTTP_OK);
+            else
+                return response()->json([
+                    'success' => true,
+                    'message' => 'This user has no accounts.',
+                    'data' => []
+                ],  Response::HTTP_OK);
     }
 
-    public function store(StoreAccountRequest $request)
+    public function store(StoreAccountRequest $request): JsonResponse
     {
         Gate::authorize('create', [Account::class, $request]);
 
-        $newAccount = $this->accountService->store($request);
+        $validatedRequest = $request->validated();
+
+        $newAccount = $this->accountService->store($validatedRequest);
 
         if ($newAccount)
             return response()->json([
@@ -56,7 +60,7 @@ class AccountController extends Controller
             ], Response::HTTP_CREATED);
     }
 
-    public function show(Account $account)
+    public function show(Account $account): JsonResponse
     {
         $myAccount = $this->accountService->show($account);
 
@@ -68,11 +72,13 @@ class AccountController extends Controller
             ], Response::HTTP_OK);
     }
 
-    public function update(UpdateAccountRequest $request, Account $account)
+    public function update(UpdateAccountRequest $request, Account $account): JsonResponse
     {
         Gate::authorize('update', [$account, $request]);
 
-        $updatedAccount = $this->accountService->update($request, $account);
+        $validatedRequest = $request->validated();
+
+        $updatedAccount = $this->accountService->update($validatedRequest, $account);
 
         if ($updatedAccount)
             return response()->json([
@@ -84,7 +90,7 @@ class AccountController extends Controller
             ],  Response::HTTP_OK);
     }
 
-    public function delete(Account $account)
+    public function delete(Account $account): JsonResponse
     {
         $this->accountService->delete($account);
 

@@ -1,10 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\AccountController;
-use App\Http\Controllers\IncomeController;
-use App\Http\Controllers\IncomeGroupController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\AccountController;
+use App\Http\Controllers\Api\IncomeController;
+use App\Http\Controllers\Api\IncomeGroupController;
 
 
 //Public routes

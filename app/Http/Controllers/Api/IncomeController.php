@@ -9,6 +9,7 @@ use App\Models\Account;
 use App\Models\Income;
 use App\Models\IncomeGroup;
 use App\Services\IncomeService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 
@@ -21,7 +22,7 @@ class IncomeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Account $account, IncomeGroup $incomeGroup)
+    public function index(Account $account, IncomeGroup $incomeGroup): JsonResponse
     {
         $allIncomes = $this->incomeService->index($account, $incomeGroup);
 
@@ -50,11 +51,13 @@ class IncomeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreIncomeRequest $request, Account $account, IncomeGroup $incomeGroup)
+    public function store(StoreIncomeRequest $request, Account $account, IncomeGroup $incomeGroup): JsonResponse
     {
         Gate::authorize('create', [Income::class, $request]);
 
-        $newIncome = $this->incomeService->store($request, $account, $incomeGroup);
+        $validatedRequest = $request->validated();
+
+        $newIncome = $this->incomeService->store($validatedRequest, $account, $incomeGroup);
 
         if($newIncome)
             return response()->json([
@@ -67,7 +70,7 @@ class IncomeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Account $account, IncomeGroup $incomeGroup, Income $income)
+    public function show(Account $account, IncomeGroup $incomeGroup, Income $income): JsonResponse
     {
         $income = $this->incomeService->show($income);
 
@@ -81,11 +84,13 @@ class IncomeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateIncomeRequest $request, Account $account, IncomeGroup $incomeGroup, Income $income)
+    public function update(UpdateIncomeRequest $request, Account $account, IncomeGroup $incomeGroup, Income $income): JsonResponse
     {
         Gate::authorize('update', [$income, $request]);
 
-        $updatedIncome = $this->incomeService->update($request, $income);
+        $validatedRequest = $request->validated();
+
+        $updatedIncome = $this->incomeService->update($validatedRequest, $income);
 
         return response()->json([
             'success' => true,
@@ -97,7 +102,7 @@ class IncomeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Account $account, IncomeGroup $incomeGroup, Income $income)
+    public function destroy(Account $account, IncomeGroup $incomeGroup, Income $income): JsonResponse
     {
         $this->incomeService->delete($income);
 
