@@ -14,10 +14,16 @@ class ScheduleSeeder extends Seeder
     public function run(): void
     {
         Schedule::create([
-            'plan' => 'weekly'
+            'type' => 'onetime'
         ]);
         Schedule::create([
-            'plan' => 'monthly'
+            'type' => 'daily'
+        ]);
+        Schedule::create([
+            'type' => 'weekly'
+        ]);
+        Schedule::create([
+            'type' => 'monthly'
         ]);
     }
 }

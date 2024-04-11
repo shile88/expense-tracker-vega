@@ -23,8 +23,9 @@ class StoreExpenseRequest extends FormRequest
     {
         return [
             'amount' => 'required|integer',
-            'schedule_id' => 'nullable|integer|in:1,2',
-            'income_date' => 'nullable|date|after_or_equal:today'
+            'schedule_id' => 'required|integer|exists:schedules,id',
+            'end_date' => 'nullable|date|after_or_equal:today',
+            'transaction_start' => 'required|integer|in:1,2,3,4,5,6,7'
         ];
     }
 }

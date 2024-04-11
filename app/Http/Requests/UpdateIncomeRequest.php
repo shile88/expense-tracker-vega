@@ -23,9 +23,10 @@ class UpdateIncomeRequest extends FormRequest
     {
         return [
             'amount' => 'required|integer',
-            'schedule_id' => 'nullable|integer|in:1,2',
-            'income_date' => 'nullable|date|after_or_equal:today',
-            'income_group_id' => 'required|integer|exists:income_groups,id'
+            'schedule_id' => 'nullable|integer|exists:schedules,id',
+            'end_date' => 'nullable|date|after_or_equal:today',
+            'income_group_id' => 'required|integer|exists:income_groups,id',
+            'transaction_start' => 'nullable|integer|in:1,2,3,4,5,6,7'
         ];
     }
 }

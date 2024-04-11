@@ -9,6 +9,7 @@ use App\Models\Account;
 use App\Models\Income;
 use App\Models\IncomeGroup;
 use App\Services\IncomeService;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
@@ -57,7 +58,7 @@ class IncomeController extends Controller
 
         $validatedRequest = $request->validated();
 
-        $newIncome = $this->incomeService->store($validatedRequest, $account, $incomeGroup);
+        $newIncome = $this->incomeService->store($validatedRequest, $incomeGroup);
 
         if($newIncome)
             return response()->json([

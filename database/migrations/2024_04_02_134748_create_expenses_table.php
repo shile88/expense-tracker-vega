@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('expenses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('expense_group_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('schedule_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignId('expense_group_id')->constrained();
+            $table->foreignId('schedule_id')->constrained();
             $table->integer('amount');
-            $table->date('expense_date')->nullable();
+            $table->date('end_date')->nullable();
+            $table->integer('transaction_start')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

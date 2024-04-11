@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('savings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('account_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('schedule_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignId('account_id')->constrained();
+            $table->foreignId('schedule_id')->nullable()->constrained();
             $table->integer('save_goal')->nullable();
             $table->date('save_end_date');
             $table->integer('save_fixed_amount')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

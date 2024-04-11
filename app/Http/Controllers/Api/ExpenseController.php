@@ -58,7 +58,7 @@ class ExpenseController
 
         $validatedRequest = $request->validated();
       
-        $newExpense = $this->expenseService->store($validatedRequest, $account, $expenseGroup);
+        $newExpense = $this->expenseService->store($validatedRequest, $expenseGroup);
        
         if($newExpense)
             return response()->json([

@@ -14,13 +14,13 @@ class ExpenseService
         return Expense::where('expense_group_id', $expenseGroup->id)->paginate(5);
     }
 
-    public function store($validatedRequest, $account, $expenseGroup): Expense
+    public function store($validatedRequest, $expenseGroup): Expense
     {
         return Expense::create([
             'amount' => $validatedRequest['amount'],
             'schedule_id' => $validatedRequest['schedule_id'] ?? null,
-            'expense_date' => $validatedRequest['expense_date'] ?? null,
-            'account_id' => $account->id,
+            'end_date' => $validatedRequest['expense_date'] ?? null,
+            'transaction_start' => $validatedRequest['transaction_start'] ?? null,
             'expense_group_id' => $expenseGroup->id
         ]);
     }

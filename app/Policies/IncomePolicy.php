@@ -28,13 +28,13 @@ class IncomePolicy
 
     public function checkIncomeStoreOrUpdatePermission($user, $request)
     {
-        if($user->type === 'basic' && ($request->has('schedule_id') || $request->has('income_date'))) {
-            return Response::deny('You do not have permission to schedule or set date for income');
+        if($user->type === 'basic' && ($request->input('schedule_id') != 1)) {
+            return Response::deny('You do not have permission to schedule income');
         }
 
-        if($user->type === 'premium' && $request->has('schedule_id') && $request->has('income_date')) {
-            return Response::deny('Choose one value between schedule_id and income_date');
-        }
+        // if($user->type === 'premium' && $request->has('schedule_id') && $request->has('end_date')) {
+        //     return Response::deny('Choose one value between schedule_id and income_date');
+        // }
 
         return true;
     }

@@ -1,10 +1,13 @@
 <?php
 
+use App\Jobs\ScheduledTransaction;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 use Laravel\Sanctum\Http\Middleware\CheckAbilities;
 use Laravel\Sanctum\Http\Middleware\CheckForAnyAbility;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -23,10 +26,13 @@ return Application::configure(basePath: dirname(__DIR__))
             'ability' => CheckForAnyAbility::class,
         ]);
     })
+    ->withSchedule(function (Schedule $schedule) {
+        $schedule->job(new ScheduledTransaction)->everyMinute();
+    })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (NotFoundHttpException $e, Request $request) {
             if ($request->is('api/*')) {
-                
+                Log::info('Model not found on api route', ['exception' => $e]);
                 return response()->json([
                     'success' => false,
                     'message' => 'Record not found.'
@@ -36,6 +42,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $exceptions->render(function (AccessDeniedHttpException $e, Request $request) {
             if ($request->is('api/*')) {
+                Log::info('Access denied for this user', ['exception' => $e]);
                 return response()->json([
                     'success' => false,
                     'message' => $e->getMessage()
@@ -46,6 +53,7 @@ return Application::configure(basePath: dirname(__DIR__))
         
         $exceptions->render(function (Exception $e, Request $request) {
             if ($request->is('api/*')) {
+                Log::info('New exception happened', ['exception' => $e]);
                 return response()->json([
                     'success' => false,
                     'message' => $e->getMessage()
