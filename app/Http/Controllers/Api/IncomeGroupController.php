@@ -10,6 +10,7 @@ use App\Models\IncomeGroup;
 use App\Services\IncomeGroupService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 
 class IncomeGroupController extends Controller
 {
@@ -51,6 +52,8 @@ class IncomeGroupController extends Controller
     public function store(StoreIncomeGroupRequest $request, Account $account): JsonResponse
     {
         $validatedRequest = $request->validated();
+
+        Log::info('User is trying to create income group with validated data', ['user_id' => auth()->id(), 'data' => $validatedRequest]);
 
         $newIncomeGroup = $this->incomeGroupService->store($validatedRequest, $account);
 
@@ -96,6 +99,8 @@ class IncomeGroupController extends Controller
      */
     public function destroy(Account $account, IncomeGroup $incomeGroup): JsonResponse
     {
+        Log::info('User is trying to delete income group', ['user_id' => auth()->id(), 'income_group' => $incomeGroup->id]);
+
         $this->incomeGroupService->delete($incomeGroup);
 
         return response()->json([

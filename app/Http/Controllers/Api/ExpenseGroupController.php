@@ -11,6 +11,7 @@ use App\Services\ExpenseGroupService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 
 class ExpenseGroupController
 {
@@ -53,6 +54,8 @@ class ExpenseGroupController
     public function store(StoreExpenseGroupRequest $request, Account $account): JsonResponse
     {
         $validatedRequest = $request->validated();
+
+        Log::info('User is trying to create expense group with validated data', ['user_id' => auth()->id(), 'data' => $validatedRequest]);
 
         $newExpenseGroup = $this->expenseGroupService->store($validatedRequest, $account);
 
@@ -98,6 +101,8 @@ class ExpenseGroupController
      */
     public function destroy(Account $account, ExpenseGroup $expenseGroup)
     {
+        Log::info('User is trying to delete expense group', ['user_id' => auth()->id(), 'expense_group_id' => $expenseGroup->id]);
+
         $this->expenseGroupService->delete($expenseGroup);
 
         return response()->json([

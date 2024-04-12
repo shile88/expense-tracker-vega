@@ -17,8 +17,6 @@ class AccountService
 
     public function store(array $validatedRequest): Account
     {
-        Log::warning('User data for account creating is validated', ['user' => auth()->id(), 'data' => $validatedRequest]);
-
         $newAccount = Account::create($validatedRequest);
 
         return $newAccount;
@@ -40,8 +38,6 @@ class AccountService
 
     public function delete($account): void
     {
-        Log::warning('User is allowed to delete a account', ['user' => auth()->id(), 'account' => $account->id]);
-        
         $account->delete();
 
         Log::info('User deleted account', ['user' => auth()->id(), 'account' => $account->id]);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\TransactionStartRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreExpenseRequest extends FormRequest
@@ -25,7 +26,10 @@ class StoreExpenseRequest extends FormRequest
             'amount' => 'required|integer',
             'schedule_id' => 'required|integer|exists:schedules,id',
             'end_date' => 'nullable|date|after_or_equal:today',
-            'transaction_start' => 'required|integer|in:1,2,3,4,5,6,7'
-        ];
+            'transaction_start' => [
+                'nullable',
+                'integer',
+                new TransactionStartRule
+        ]];
     }
 }

@@ -47,13 +47,13 @@ class AccountController extends Controller
 
     public function store(StoreAccountRequest $request): JsonResponse
     {
-        Log::warning('User is trying to create an account', ['user' => auth()->id(), 'data' => $request]);
-        
         Gate::authorize('create', [Account::class, $request]);
 
-        Log::warning('User is allowed to create an account', ['user' => auth()->id(), 'data' => $request]);
+        Log::info('User is allowed to create an account', ['user' => auth()->id(), 'data' => $request]);
         
         $validatedRequest = $request->validated();
+
+        Log::info('User is trying to create an account', ['user' => auth()->id(), 'data' => $validatedRequest]);
 
         $newAccount = $this->accountService->store($validatedRequest);
 
@@ -99,7 +99,7 @@ class AccountController extends Controller
 
     public function delete(Account $account): JsonResponse
     {
-        Log::warning('User is trying to delete an account', ['user' => auth()->id(), 'account' => $account->id]);
+        Log::info('User is allowed to delete an account', ['user' => auth()->id(), 'account' => $account->id]);
 
         $this->accountService->delete($account);
 

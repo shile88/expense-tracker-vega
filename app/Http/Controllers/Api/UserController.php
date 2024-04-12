@@ -7,6 +7,7 @@ use App\Http\Requests\UserRegisterRequest;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -17,6 +18,8 @@ class UserController extends Controller
     public function register(UserRegisterRequest $request): JsonResponse
     {
         $validatedRequest = $request->validated();
+
+        Log::info('Trying to create new user with validated request', ['data' => $validatedRequest]);
 
         $newUser = $this->userService->register($validatedRequest);
 
@@ -33,6 +36,8 @@ class UserController extends Controller
     public function login(UserLoginRequest $request): JsonResponse
     {
         $validatedRequest = $request->validated();
+
+        Log::info('Trying to login user with validated request', ['data' => $validatedRequest]);
 
         $data = $this->userService->login($validatedRequest);
 
@@ -57,6 +62,8 @@ class UserController extends Controller
 
     public function logout(): JsonResponse
     {
+        Log::info('User trying to logout', ['user_id' => auth()->id()]);
+
         $this->userService->logout();
 
         return response()->json([

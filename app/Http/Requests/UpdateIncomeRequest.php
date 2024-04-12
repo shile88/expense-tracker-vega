@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\TransactionStartRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateIncomeRequest extends FormRequest
@@ -26,7 +27,11 @@ class UpdateIncomeRequest extends FormRequest
             'schedule_id' => 'nullable|integer|exists:schedules,id',
             'end_date' => 'nullable|date|after_or_equal:today',
             'income_group_id' => 'required|integer|exists:income_groups,id',
-            'transaction_start' => 'nullable|integer|in:1,2,3,4,5,6,7'
+            'transaction_start' => [
+                'nullable',
+                'integer',
+                new TransactionStartRule()
+            ],
         ];
     }
 }

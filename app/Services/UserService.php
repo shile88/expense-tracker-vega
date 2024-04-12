@@ -7,6 +7,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class UserService
 {
@@ -22,12 +23,16 @@ class UserService
             ]
         );
 
+        Log::info('New user created', ['user' => $user->id]);
+
         UserRegistered::dispatch($user);
+
+        Log::info('Created account for new user', ['user' => $user->id]);
 
         return $user;
     }
 
-    public function login($validatedRequest): array|bool
+    public function login(array $validatedRequest): array|bool
     {
         if (Auth::attempt($validatedRequest)) {
             $user = auth()->user();
@@ -36,8 +41,11 @@ class UserService
                 $user->createToken('access_token')->plainTextToken :
                 $user->createToken('access_token')->plainTextToken;
 
+            Log::info('User logged in and token created', ['user' => $user->id]);    
             return [$user, $token];
         }
+
+        Log::error('Cant login with given credentials', ['data' => $validatedRequest]);
 
         return false;
     }
@@ -45,5 +53,7 @@ class UserService
     public function logout(): void
     {
         auth()->user()->tokens()->delete();
+        
+        Log::info('User log out', ['user' =>auth()->id()]);
     }
 }

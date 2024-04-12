@@ -12,6 +12,7 @@ use App\Services\ExpenseService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 
 class ExpenseController
 {
@@ -57,6 +58,8 @@ class ExpenseController
         Gate::authorize('create', [Expense::class, $request]);
 
         $validatedRequest = $request->validated();
+
+        Log::info('User is trying to create expense with validated data', ['user_id' => auth()->id(), 'data' => $validatedRequest]);
       
         $newExpense = $this->expenseService->store($validatedRequest, $expenseGroup);
        
@@ -105,6 +108,8 @@ class ExpenseController
      */
     public function destroy(Account $account, ExpenseGroup $expenseGroup, Expense $expense)
     {
+        Log::info('User is trying to delete expense', ['user_id' => auth()->id(), 'expense_id' => $expense->id]);
+
         $this->expenseService->delete($expense);
 
         return response()->json([
