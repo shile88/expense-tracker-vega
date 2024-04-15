@@ -61,10 +61,8 @@ class AccountController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Account created successfully',
-                'data' => $newAccount
+                'data' => AccountResource::make($newAccount)
             ], Response::HTTP_CREATED);
-
-        
     }
 
     public function show(Account $account): JsonResponse
@@ -75,7 +73,7 @@ class AccountController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Here is your account.',
-                'data' => $myAccount
+                'data' => AccountResource::make($myAccount)
             ], Response::HTTP_OK);
     }
 
@@ -92,12 +90,12 @@ class AccountController extends Controller
                 'success' => true,
                 'message' => 'Updated successfully',
                 'data' => [
-                    'account' => $updatedAccount
+                    'account' => AccountResource::make($updatedAccount)
                 ]
             ],  Response::HTTP_OK);
     }
 
-    public function delete(Account $account): JsonResponse
+    public function destroy(Account $account): JsonResponse
     {
         Log::info('User is allowed to delete an account', ['user' => auth()->id(), 'account' => $account->id]);
 

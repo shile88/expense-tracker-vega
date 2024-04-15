@@ -11,7 +11,7 @@ class Account extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['balance', 'expense_end_date', 'expense_budget', 'user_id'];
+    protected $fillable = ['balance', 'expense_end_date', 'expense_budget', 'user_id', 'type'];
 
     public function user(): BelongsTo
     {

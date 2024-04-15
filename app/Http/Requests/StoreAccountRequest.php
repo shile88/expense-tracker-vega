@@ -22,10 +22,18 @@ class StoreAccountRequest extends FormRequest
     public function rules(): array
     {
         return [
-            
-            'balance' => 'required|integer',
+            'balance' => 'nullable|integer',
+            'type' => 'nullable|string|in:checking,savings,business|unique:accounts,type',
             'expense_end_date' => 'nullable|date|after_or_equal:today',
             'expense_budget' => 'nullable|integer|min:10'
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'type.unique' => 'Account already exists with same type',
+            'type.in' => 'Allowed account type are checking, savings, business'
         ];
     }
 }

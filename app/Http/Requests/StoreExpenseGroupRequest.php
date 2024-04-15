@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\UniqueNameForAccountId;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreExpenseGroupRequest extends FormRequest
@@ -22,7 +23,7 @@ class StoreExpenseGroupRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|alpha|unique:expense_groups,name',
+            'name' => ['required', 'string', 'alpha', new UniqueNameForAccountId($this->account)],
             'group_budget' => 'nullable|integer|min:10'
         ];
     }
