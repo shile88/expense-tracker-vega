@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->integer('group_budget')->nullable();
-            $table->foreignId('account_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('account_id')->constrained();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

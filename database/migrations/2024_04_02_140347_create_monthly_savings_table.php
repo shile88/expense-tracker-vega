@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('monthly_savings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('saving_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('saving_id')->constrained();
             $table->integer('amount');
             $table->string('month');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

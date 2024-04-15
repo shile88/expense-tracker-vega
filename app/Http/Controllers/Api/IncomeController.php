@@ -9,15 +9,19 @@ use App\Models\Account;
 use App\Models\Income;
 use App\Models\IncomeGroup;
 use App\Services\IncomeService;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 
 class IncomeController extends Controller
 {
     public function __construct(protected IncomeService $incomeService)
     {
-        
     }
     /**
      * Display a listing of the resource.
@@ -26,7 +30,7 @@ class IncomeController extends Controller
     {
         $allIncomes = $this->incomeService->index($account, $incomeGroup);
 
-        if($allIncomes)
+        if ($allIncomes)
             return response()->json([
                 'success' => true,
                 'message' => 'Show all incomes.',
@@ -44,7 +48,7 @@ class IncomeController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'No income data.',
-                'data' => [] 
+                'data' => []
             ], Response::HTTP_OK);
     }
 
@@ -57,9 +61,11 @@ class IncomeController extends Controller
 
         $validatedRequest = $request->validated();
 
-        $newIncome = $this->incomeService->store($validatedRequest, $account, $incomeGroup);
+        Log::info('User is trying to create income with validated data', ['user_id' => auth()->id(), 'data' => $validatedRequest]);
 
-        if($newIncome)
+        $newIncome = $this->incomeService->store($validatedRequest, $incomeGroup);
+
+        if ($newIncome)
             return response()->json([
                 'success' => true,
                 'message' => 'Income created successfully',
@@ -104,6 +110,8 @@ class IncomeController extends Controller
      */
     public function destroy(Account $account, IncomeGroup $incomeGroup, Income $income): JsonResponse
     {
+        Log::info('User is trying to delete income', ['user_id' => auth()->id(), 'income_id' => $income->id]);
+
         $this->incomeService->delete($income);
 
         return response()->json([

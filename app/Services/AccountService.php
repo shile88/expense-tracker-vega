@@ -5,17 +5,23 @@ namespace App\Services;
 use App\Models\Account;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Log;
 
-class AccountService {
+class AccountService
+{
 
     public function index(): LengthAwarePaginator
     {
-       return Account::where('user_id', auth()->id())->paginate(5);
+        return Account::where('user_id', auth()->id())->paginate(5);
     }
 
     public function store(array $validatedRequest): Account
     {
-        return Account::create($validatedRequest);
+        $newAccount = Account::create($validatedRequest);
+
+        return $newAccount;
+
+        Log::info('User successfully created account', ['user' => auth()->id(), 'account' => $newAccount->id]);
     }
 
     public function show(Account $account): Account
@@ -33,5 +39,7 @@ class AccountService {
     public function delete($account): void
     {
         $account->delete();
+
+        Log::info('User deleted account', ['user' => auth()->id(), 'account' => $account->id]);
     }
 }

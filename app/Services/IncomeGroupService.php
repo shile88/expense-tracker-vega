@@ -7,6 +7,7 @@ use App\Models\IncomeGroup;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Pagination\Paginator;
+use Illuminate\Support\Facades\Log;
 
 class IncomeGroupService
 {
@@ -22,10 +23,14 @@ class IncomeGroupService
 
     public function store(array $validatedRequest, Account $account): IncomeGroup
     {
-        return IncomeGroup::create([
+        $incomeGroup = IncomeGroup::create([
             'name' => $validatedRequest['name'],
             'account_id' => $account->id
         ]);
+
+        Log::info('New income group created', ['user' => auth()->id(), 'data' => $incomeGroup]);
+
+        return $incomeGroup;
     }
 
     public function update(array $validatedRequest, IncomeGroup $incomeGroup): IncomeGroup
@@ -38,5 +43,7 @@ class IncomeGroupService
     public function delete(IncomeGroup $incomeGroup): void
     {
         $incomeGroup->delete();
+
+        Log::info('User deleted income group', ['user' => auth()->id(), 'income_group' => $incomeGroup->id]);
     }
 }

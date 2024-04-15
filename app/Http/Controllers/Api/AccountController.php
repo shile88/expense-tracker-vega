@@ -11,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class AccountController extends Controller
 {
@@ -48,7 +49,11 @@ class AccountController extends Controller
     {
         Gate::authorize('create', [Account::class, $request]);
 
+        Log::info('User is allowed to create an account', ['user' => auth()->id(), 'data' => $request]);
+        
         $validatedRequest = $request->validated();
+
+        Log::info('User is trying to create an account', ['user' => auth()->id(), 'data' => $validatedRequest]);
 
         $newAccount = $this->accountService->store($validatedRequest);
 
@@ -58,6 +63,8 @@ class AccountController extends Controller
                 'message' => 'Account created successfully',
                 'data' => $newAccount
             ], Response::HTTP_CREATED);
+
+        
     }
 
     public function show(Account $account): JsonResponse
@@ -92,6 +99,8 @@ class AccountController extends Controller
 
     public function delete(Account $account): JsonResponse
     {
+        Log::info('User is allowed to delete an account', ['user' => auth()->id(), 'account' => $account->id]);
+
         $this->accountService->delete($account);
 
         return response()->json([

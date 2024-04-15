@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('incomes', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('income_group_id')->constrained();
-            $table->foreignId('schedule_id')->constrained();
-            $table->integer('amount');
-            $table->date('end_date')->nullable();
-            $table->integer('transaction_start')->nullable();
+            $table->morphs('transactionable');
+            $table->foreignId('account_id')->constrained();
+            $table->string('amount');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('incomes');
+        Schema::dropIfExists('transactions');
     }
 };

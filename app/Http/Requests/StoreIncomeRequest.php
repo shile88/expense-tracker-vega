@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\TransactionStartRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreIncomeRequest extends FormRequest
 {
@@ -23,8 +25,13 @@ class StoreIncomeRequest extends FormRequest
     {
         return [
             'amount' => 'required|integer',
-            'schedule_id' => 'nullable|integer|in:1,2',
-            'income_date' => 'nullable|date|after_or_equal:today'
+            'schedule_id' => 'required|integer|exists:schedules,id',
+            'end_date' => 'nullable|date|after_or_equal:today',
+            'transaction_start' => [
+                'nullable',
+                'integer',
+                new TransactionStartRule()
+            ],
         ];
     }
 }

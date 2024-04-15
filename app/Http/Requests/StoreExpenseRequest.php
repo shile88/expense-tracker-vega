@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Rules\TransactionStartRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateIncomeRequest extends FormRequest
+class StoreExpenseRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,14 +24,12 @@ class UpdateIncomeRequest extends FormRequest
     {
         return [
             'amount' => 'required|integer',
-            'schedule_id' => 'nullable|integer|exists:schedules,id',
+            'schedule_id' => 'required|integer|exists:schedules,id',
             'end_date' => 'nullable|date|after_or_equal:today',
-            'income_group_id' => 'required|integer|exists:income_groups,id',
             'transaction_start' => [
                 'nullable',
                 'integer',
-                new TransactionStartRule()
-            ],
-        ];
+                new TransactionStartRule
+        ]];
     }
 }

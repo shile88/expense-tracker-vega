@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained();
             $table->enum('type', ['checking', 'savings', 'business'])->default('checking');
             $table->integer('balance')->default(0);
             $table->date('expense_end_date')->nullable();
             $table->integer('expense_budget')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
