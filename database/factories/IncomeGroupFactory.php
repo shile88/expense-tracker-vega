@@ -16,11 +16,9 @@ class IncomeGroupFactory extends Factory
      */
     public function definition(): array
     {
-        $income = ['plata', 'prodaja', 'renta', 'pozajmica'];
-
         return [
-            'name' => fake()->randomElement($income),
-            'account_id' => fake()->numberBetween(1,10)
+            'account_id' => 1,
+            'name' => 'kirija'
         ];
     }
 }

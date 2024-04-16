@@ -30,26 +30,26 @@ class IncomeController extends Controller
     {
         $allIncomes = $this->incomeService->index($account, $incomeGroup);
 
-        if ($allIncomes)
-            return response()->json([
-                'success' => true,
-                'message' => 'Show all incomes.',
-                'data' => [
-                    'income' => IncomeResource::collection($allIncomes),
-                    'pagination' => [
-                        'total' => $allIncomes['total'],
-                        'per_page' => $allIncomes['perPage'],
-                        'current_page' => $allIncomes['currentPage'],
-                        'last_page' => $allIncomes['lastPage']
-                    ]
-                ]
-            ], Response::HTTP_OK);
-        else
+        if ($allIncomes->isEmpty())
             return response()->json([
                 'success' => true,
                 'message' => 'No income data.',
                 'data' => []
             ], Response::HTTP_OK);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Show all incomes.',
+            'data' => [
+                'incomes' => IncomeResource::collection($allIncomes),
+                'pagination' => [
+                    'total' => $allIncomes['total'],
+                    'per_page' => $allIncomes['perPage'],
+                    'current_page' => $allIncomes['currentPage'],
+                    'last_page' => $allIncomes['lastPage']
+                ]
+            ]
+        ], Response::HTTP_OK);
     }
 
     /**

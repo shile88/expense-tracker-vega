@@ -30,7 +30,7 @@ class UserController extends Controller
                 'data' => [
                     'user' => $newUser
                 ]
-            ], Response::HTTP_OK);
+            ], Response::HTTP_CREATED);
     }
 
     public function login(UserLoginRequest $request): JsonResponse
@@ -51,7 +51,7 @@ class UserController extends Controller
                     'user' => $user,
                     'access_token' => $token
                 ]
-            ], Response::HTTP_CREATED);
+            ], Response::HTTP_OK);
         } else {
             return response()->json([
                 'success' => false,

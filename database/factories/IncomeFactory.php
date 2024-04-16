@@ -17,17 +17,10 @@ class IncomeFactory extends Factory
      */
     public function definition(): array
     {
-        $amount = [100, 200, 300, 400, 500];
-
-        $endOfMonth = new DateTime('2024-04-30');
-
-        $date = fake()->boolean(50) ? null : fake()->dateTimeBetween('now', $endOfMonth)->format('Y-m-d');
-
         return [
-           'income_group_id' => fake()->numberBetween(1,10),
-           'amount' => $amount[array_rand($amount)],
-           'schedule_id' => (random_int(1, 2) <= 1) ? random_int(1, 2) : null,
-           'income_date' => $date
+           'income_group_id' => 1,
+           'amount' => 50,
+           'schedule_id' => 1
         ];
     }
 }

@@ -22,28 +22,30 @@ class IncomeGroupController extends Controller
      */
     public function index(Account $account): JsonResponse
     {
+
         $incomeGroups = $this->incomeGroupService->index($account);
 
-        if ($incomeGroups)
+        if ($incomeGroups->isEmpty()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'No income groups for this account.',
+                'data' => []
+            ], Response::HTTP_OK);
+        } else {
             return response()->json([
                 'success' => true,
                 'message' => 'All income groups for account.',
                 'data' => [
                     'income_groups' => IncomeGroupResource::collection($incomeGroups),
                     'pagination' => [
-                        'total' => $incomeGroups['total'],
-                        'per_page' => $incomeGroups['perPage'],
-                        'current_page' => $incomeGroups['currentPage'],
-                        'last_page' => $incomeGroups['lastPage']
+                        'total' => $incomeGroups->total(),
+                        'per_page' => $incomeGroups->perPage(),
+                        'current_page' => $incomeGroups->currentPage(),
+                        'last_page' => $incomeGroups->lastPage()
                     ]
                 ]
             ], Response::HTTP_OK);
-        else
-            return response()->json([
-                'success' => true,
-                'message' => 'No income groups for this account.',
-                'data' => []
-            ], Response::HTTP_NO_CONTENT);
+        }
     }
 
     /**

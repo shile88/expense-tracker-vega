@@ -17,11 +17,14 @@ class AccountService
 
     public function store(array $validatedRequest): Account
     {
-        $newAccount = Account::create($validatedRequest);
-
-        return $newAccount;
+        $newAccount = Account::create([
+            'user_id' => auth()->id(),
+            ...$validatedRequest
+        ]);
 
         Log::info('User successfully created account', ['user' => auth()->id(), 'account' => $newAccount->id]);
+
+        return $newAccount;
     }
 
     public function show(Account $account): Account

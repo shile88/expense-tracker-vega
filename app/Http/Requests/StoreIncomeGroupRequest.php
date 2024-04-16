@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Account;
+use App\Models\IncomeGroup;
+use App\Rules\UniqueNameForAccountId;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreIncomeGroupRequest extends FormRequest
@@ -22,7 +25,7 @@ class StoreIncomeGroupRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|alpha|unique:income_groups,name'
+            'name' => ['required', 'string', 'alpha', new UniqueNameForAccountId($this->account)],
         ];
     }
 }

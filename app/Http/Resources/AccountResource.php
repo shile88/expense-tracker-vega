@@ -18,6 +18,7 @@ class AccountResource extends JsonResource
             'id' => $this->id,
             'user' => UserResource::make($this->user),
             'balance' => $this->balance,
+            'type' => $this->type,
             'expense_end_date' => $this->expense_end_date,
             'expense_budget' => $this->expense_budget
         ];

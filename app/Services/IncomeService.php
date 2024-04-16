@@ -23,7 +23,7 @@ class IncomeService {
         $income = Income::create([
             'amount' => $validatedRequest['amount'],
             'schedule_id' => $validatedRequest['schedule_id'] ?? null,
-            'end_date' => $validatedRequest['end_date'],
+            'end_date' => $validatedRequest['end_date'] ?? null,
             'income_group_id' => $incomeGroup->id,
             'transaction_start' => $validatedRequest['transaction_start'] ?? null
         ]);
