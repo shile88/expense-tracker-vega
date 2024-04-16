@@ -19,7 +19,7 @@ class TransactionStartRule implements ValidationRule
     
         switch ($scheduleId) {
             case 1:
-                $allowedValues = [1, 2, 3, 4, 5, 6, 7];
+                $allowedValues = ['empty'];
                 break;
             case 2:
                 $allowedValues = [1, 2, 3, 4, 5, 6, 7];

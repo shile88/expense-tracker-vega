@@ -16,7 +16,7 @@ class UserTest extends TestCase
     /**
      * A basic feature test example.
      */
-    public function test_register_new_user(): void
+    public function test_register_new_user_successfully(): void
     {
         Event::fake(UserRegistered::class);
 
@@ -30,11 +30,9 @@ class UserTest extends TestCase
         $response = $this->postJson('api/register', $user);
 
         $response->assertCreated();
-
         Event::assertDispatched(function (UserRegistered $event) use ($user) {
             return $event->user->id === $user['id'];
         });
-
         $response->assertJsonStructure([
             'success',
             'message',
@@ -44,7 +42,21 @@ class UserTest extends TestCase
         ]);
     }
 
-    public function test_login_user(): void
+    public function test_missing_parameter_to_register_new_user(): void 
+    {
+        $user = [
+            'id' => 1,
+            'name' => 'Milos',
+            'email' => '',
+            'password' => '12345678'
+        ];
+
+        $response = $this->postJson('api/register', $user);
+
+        $response->assertStatus(422);
+    }
+
+    public function test_login_user_successfully(): void
     {
         $user = User::create([
             'name' => 'Milos',
@@ -55,10 +67,6 @@ class UserTest extends TestCase
         $response = $this->postJson('api/login', ['email' =>'test@test.com', 'password' => 'password']);
 
         $response->assertStatus(200);
-
-        // $token = $user->createToken('access_token')->plainTextToken;
-        // $this->assertNotNull($token);
-
         $response->assertJsonStructure([
             'success',
             'message',
@@ -66,6 +74,23 @@ class UserTest extends TestCase
                 'user',
                 'access_token'
             ],
+        ]);
+    }
+
+    public function test_invalid_credentials_to_login_user(): void
+    {
+        $user = User::create([
+            'name' => 'Milos',
+            'email' => 'test@test.com',
+            'password' => Hash::make('password')
+        ]);
+
+        $response = $this->postJson('api/login', ['email' =>'test2@test.com', 'password' => 'password']);
+
+        $response->assertStatus(422);
+        $response->assertJsonStructure([
+            'success',
+            'message',
         ]);
     }
 

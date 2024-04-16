@@ -23,7 +23,7 @@ class StoreAccountRequest extends FormRequest
     {
         return [
             'balance' => 'nullable|integer',
-            'type' => 'nullable|string|in:checking,savings,business|unique:accounts,type',
+            'type' => 'required|string|in:checking,savings,business|unique:accounts,type,NULL,id,deleted_at,NULL',
             'expense_end_date' => 'nullable|date|after_or_equal:today',
             'expense_budget' => 'nullable|integer|min:10'
         ];
