@@ -1,12 +1,14 @@
 <?php
 
 use App\Jobs\ScheduledTransaction;
+use App\Jobs\SendWeeklyAndMonthlyEmail;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Http\Middleware\CheckAbilities;
@@ -29,10 +31,22 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withSchedule(function (Schedule $schedule) {
-        $schedule->job(new ScheduledTransaction)->everyThirtySeconds()->onSuccess(function () {
-            Log::info('Scheduled job started successfully');
+        $schedule->job(new ScheduledTransaction)->daily()->onSuccess(function () {
+            Log::info('Scheduled transactions job started successfully');
         })->onFailure(function() {
-            Log::error('Scheduled job interrupted');
+            Log::error('Scheduled transactions job interrupted');
+        });
+
+        $schedule->job(new SendWeeklyAndMonthlyEmail)->everyThirtySeconds()->onSuccess(function () {
+            Log::info('Scheduled job for sending weekly email successfully');
+        })->onFailure(function() {
+            Log::error('Scheduled job for sending weekly email interrupted');
+        });
+
+        $schedule->job(new SendWeeklyAndMonthlyEmail)->monthly()->onSuccess(function () {
+            Log::info('Scheduled job for sending monthly email successfully');
+        })->onFailure(function() {
+            Log::error('Scheduled job for sending monthly email interrupted');
         });
     })
     ->withExceptions(function (Exceptions $exceptions) {
