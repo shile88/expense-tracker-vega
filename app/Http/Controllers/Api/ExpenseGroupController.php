@@ -11,6 +11,7 @@ use App\Services\ExpenseGroupService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 
 class ExpenseGroupController
@@ -53,6 +54,8 @@ class ExpenseGroupController
      */
     public function store(StoreExpenseGroupRequest $request, Account $account): JsonResponse
     {
+        Gate::authorize('create', [ExpenseGroup::class, $request]);
+
         $validatedRequest = $request->validated();
 
         Log::info('User is trying to create expense group with validated data', ['user_id' => auth()->id(), 'data' => $validatedRequest]);
@@ -85,6 +88,8 @@ class ExpenseGroupController
      */
     public function update(UpdateExpenseGroupRequest $request, Account $account, ExpenseGroup $expenseGroup)
     {
+        Gate::authorize('update', [ExpenseGroup::class, $request]);
+
         $validatedRequest = $request->validated();
        
         $updatedExpenseGroup = $this->expenseGroupService->update($validatedRequest, $expenseGroup);
