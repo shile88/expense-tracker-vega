@@ -16,7 +16,7 @@ class ExpensePolicy
        return $this->checkIncomeStoreOrUpdatePermission($user, $request);
     }
 
-    public function update(User $user, Expense $income, UpdateExpenseRequest $request)
+    public function update(User $user, Expense $expense, UpdateExpenseRequest $request)
     {
         return $this->checkIncomeStoreOrUpdatePermission($user, $request);
     }

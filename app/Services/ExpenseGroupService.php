@@ -17,9 +17,8 @@ class ExpenseGroupService
     public function store(array $validatedRequest, Account $account): ExpenseGroup
     {
         $expenseGroup = ExpenseGroup::create([
-            'name' => $validatedRequest['name'],
-            'group_budget' => $validatedRequest['group_budget'],
-            'account_id' => $account->id
+            'account_id' => $account->id,
+            ...$validatedRequest
         ]);
 
         Log::info('New expense group created', ['user_id' => auth()->id(), 'data' => $expenseGroup]);

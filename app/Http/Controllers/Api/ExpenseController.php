@@ -33,7 +33,7 @@ class ExpenseController
                 'success' => true,
                 'message' => 'Show all expenses.',
                 'data' => [
-                    'income' => ExpenseResource::collection($allExpenses),
+                    'expenses' => ExpenseResource::collection($allExpenses),
                     'pagination' => [
                         'total' => $allExpenses['total'],
                         'per_page' => $allExpenses['perPage'],
@@ -66,7 +66,7 @@ class ExpenseController
         if($newExpense)
             return response()->json([
                 'success' => true,
-                'message' => 'Income created successfully',
+                'message' => 'Expense created successfully',
                 'data' => ExpenseResource::make($newExpense)
             ], Response::HTTP_CREATED);
     }
@@ -98,7 +98,7 @@ class ExpenseController
 
         return response()->json([
             'success' => true,
-            'message' => 'Income updated successfully',
+            'message' => 'Expense updated successfully',
             'data' => ExpenseResource::make($updatedExpense)
         ], Response::HTTP_OK);
     }

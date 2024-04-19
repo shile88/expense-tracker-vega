@@ -2,12 +2,15 @@
 
 namespace App\Services;
 
+use App\Jobs\UpdateAccountBalance;
+use App\Models\Account;
 use App\Models\Expense;
 use App\Models\Income;
 use App\Models\Transaction;
 use Carbon\Carbon;
-use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class JobService
@@ -16,40 +19,56 @@ class JobService
     {
         Log::info('Creating transactions process started');
 
-        try {
-            $incomes = $this->queryModel(new Income());
-            Log::info('Successful income query');
-    
-            foreach ($incomes as $income) {
-                $account = $income->incomeGroup;
-    
-                if ($this->shouldAddToTransactions($income)) {
-                    $this->addToTransactions($income, $account);
-                    Log::info('Added income to transactions', ['income_id' => $income->id]);
-                }
+        $this->processIncomeOrExpenseToTransactions(new Income(), 'income');
+        $this->processIncomeOrExpenseToTransactions(new Expense(), 'expense');
+    }
+
+    public function updateAccountBalance(array $transactionIds)
+    {
+        DB::transaction(function () use ($transactionIds) {
+            $transactions = Transaction::whereIn('transactionable_id', $transactionIds)->whereDate('created_at', now()->toDateString())->get();
+
+            foreach ($transactions as $transaction) {
+                $account = $transaction->account;
+
+                $newBalance = ($transaction->transactionable_type === 'App\Models\Income')
+                    ? $account->balance + $transaction->amount
+                    : $account->balance - $transaction->amount;
+
+                $account->update(['balance' => $newBalance]);
+                $transaction->update(['is_added_to_balance' => true]);
+                Log::info('Account updated successfully', ['transaction_id' => $transaction->id, 'amount' => $transaction->amount]);
             }
-        } catch (\Exception $e) {
-            Log::error('Error processing incomes', ['income_id'=>$income->id, 'error' => $e->getMessage()]);
+        });
+    }
+
+    private function processIncomeOrExpenseToTransactions(Model $model, string $type): void
+    {
+        $incomeOrExpenseTransactions = $this->queryIncomeOrExpense($model);
+
+        Log::info('Successful ' . $type . ' query');
+
+        foreach ($incomeOrExpenseTransactions as $incomeOrExpenseTransaction) {
+            $account = $incomeOrExpenseTransaction->{$type . 'Group'}->account;
+
+            try {
+                if ($this->shouldAddIncomeOrExpenseToTransactions($incomeOrExpenseTransaction)) {
+                    $this->addIncomeOrExpenseToTransactions($incomeOrExpenseTransaction, $account);
+                    Log::info('Added ' . $type . ' to transactions', ['id' => $incomeOrExpenseTransaction->id]);
+                    $transactionIds[] = $incomeOrExpenseTransaction->id;
+                }
+            } catch (\Exception $e) {
+                Log::error('Error processing ' . $type . 's', ['id' => $incomeOrExpenseTransaction->id, 'error' => $e->getMessage()]);
+            }
         }
 
-        try {
-            $expenses = $this->queryModel(new Expense());
-            Log::info('Successful expense query');
-    
-            foreach ($expenses as $expense) {
-                $account = $expense->expenseGroup;
-    
-                if ($this->shouldAddToTransactions($expense)) {
-                    $this->addToTransactions($expense, $account);
-                    Log::info('Added expense to transactions', ['expense_id' => $expense->id]);
-                }
-            }
-        } catch (\Exception $e) {
-            Log::error('Error processing expenses', ['expense_id' => $expense->id,'error' => $e->getMessage()]);
+        if (!empty($transactionIds)) {
+            Log::info('Starting to add ' . $type . ' amount to balance', ['id' => $transactionIds]);
+            UpdateAccountBalance::dispatch($transactionIds, $account);
         }
     }
 
-    private function queryModel($model): Collection
+    private function queryIncomeOrExpense(Model $model): Collection
     {
         Log::info('Querying model', ['model' => get_class($model)]);
 
@@ -65,11 +84,11 @@ class JobService
             ->get();
     }
 
-    private function shouldAddToTransactions($model): bool
+    private function shouldAddIncomeOrExpenseToTransactions(Model $model): bool
     {
         $scheduleType = $model->schedule->type;
 
-        Log::info('Checking if should add to transactions', ['model_id' => $model->id, 'schedule_type' => $scheduleType]);
+        Log::info('Checking if should add to transactions', ['model' => get_class($model), 'id' => $model->id, 'schedule_type' => $scheduleType]);
 
         $startOfMonth = $model->transaction_start == 0 ? Carbon::now()->startOfMonth()->toDateString() : null;
         $endOfMonth = $model->transaction_start == 1 ? Carbon::now()->endOfMonth()->toDateString() : null;
@@ -87,26 +106,29 @@ class JobService
                     ($startOfMonth !== null && Carbon::now()->startOfMonth()->toDateString() == $startOfMonth ||
                         $endOfMonth !== null && Carbon::now()->endOfMonth()->toDateString() == $endOfMonth);
             default:
-            Log::warning('Unknown schedule type', ['schedule_type' => $scheduleType]);
-                return false;       
+                Log::warning('Unknown schedule type', ['schedule_type' => $scheduleType]);
+                return false;
         }
     }
 
-    private function addToTransactions($model, $account): void
+    private function addIncomeOrExpenseToTransactions(Model $model, Account $account): void
     {
-        if ($model->schedule->type == 'onetime')
-            Transaction::firstOrCreate([
-                'amount' => $model->amount,
-                'account_id' => $account->account_id,
-                'transactionable_id' => $model->id,
-                'transactionable_type' => get_class($model)
-            ]);
-        else
+        if ($model->schedule->type == 'onetime') {
+            if ($model->transactions()->isEmpty()) {
+                Transaction::create([
+                    'amount' => $model->amount,
+                    'account_id' => $account->id,
+                    'transactionable_id' => $model->id,
+                    'transactionable_type' => get_class($model)
+                ]);
+            }
+        } else {
             Transaction::create([
                 'amount' => $model->amount,
-                'account_id' => $account->account_id,
+                'account_id' => $account->id,
                 'transactionable_id' => $model->id,
                 'transactionable_type' => get_class($model)
             ]);
+        }
     }
 }

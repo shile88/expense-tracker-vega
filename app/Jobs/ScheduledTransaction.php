@@ -24,7 +24,7 @@ class ScheduledTransaction implements ShouldQueue
     public function handle(JobService $jobService): void
     {
        $jobService->createTransaction();
-       Log::info('Job finished successfully');
+       Log::info('Create transaction job finished successfully');
     }
 
     public function failed(?Throwable $exception): void

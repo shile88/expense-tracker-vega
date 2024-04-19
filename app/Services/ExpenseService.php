@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\ExpenseGroupBudgetCap;
 use App\Models\Account;
 use App\Models\Expense;
 use App\Models\ExpenseGroup;
@@ -18,14 +19,13 @@ class ExpenseService
     public function store(array $validatedRequest, ExpenseGroup $expenseGroup): Expense
     {
         $expense = Expense::create([
-            'amount' => $validatedRequest['amount'],
-            'schedule_id' => $validatedRequest['schedule_id'] ?? null,
-            'end_date' => $validatedRequest['expense_date'] ?? null,
-            'transaction_start' => $validatedRequest['transaction_start'] ?? null,
-            'expense_group_id' => $expenseGroup->id
+            'expense_group_id' => $expenseGroup->id,
+            ...$validatedRequest
         ]);
 
         Log::info('New expense created', ['user_id' => auth()->id(), 'data' => $expense]);
+
+        ExpenseGroupBudgetCap::dispatch($expense);
 
         return $expense;
     }

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->morphs('transactionable');
             $table->foreignId('account_id')->constrained();
             $table->string('amount');
+            $table->boolean('is_added_to_balance')->default(false);
             $table->softDeletes();
             $table->timestamps();
         });

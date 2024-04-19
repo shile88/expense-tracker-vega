@@ -3,15 +3,16 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\AccountController;
+use App\Http\Controllers\Api\BalanceReportController;
 use App\Http\Controllers\Api\ExpenseController;
 use App\Http\Controllers\Api\ExpenseGroupController;
 use App\Http\Controllers\Api\IncomeController;
 use App\Http\Controllers\Api\IncomeGroupController;
 
-
 //Public routes
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);
+
 
 //Protected routes
 Route::middleware('auth:sanctum')->group(function() {
@@ -32,6 +33,9 @@ Route::middleware('auth:sanctum')->group(function() {
         //Expenses routes
         Route::apiResource('/accounts/{account}/expense-groups', ExpenseGroupController::class);
         Route::apiResource('/accounts/{account}/expense-groups/{expense_group}/expenses', ExpenseController::class);
+
+        //Account report routes
+        Route::get('/accounts/{account}/report', [BalanceReportController::class, 'balanceReport']);
     });
 });
 
