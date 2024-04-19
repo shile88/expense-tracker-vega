@@ -11,7 +11,7 @@ class UpdateAccountRequest extends FormRequest
      */
     public function authorize(): bool
     {
-      return true;
+        return true;
     }
 
     /**
@@ -25,7 +25,7 @@ class UpdateAccountRequest extends FormRequest
             'balance' => 'nullable|integer',
             'expense_end_date' => 'nullable|date|after_or_equal:today',
             'expense_budget' => 'nullable|integer|min:10',
-            'type' => 'nullable|string|in:checking,savings,business'
+            'type' => 'nullable|string|in:checking,savings,business',
         ];
     }
 }

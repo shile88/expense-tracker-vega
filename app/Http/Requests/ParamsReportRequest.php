@@ -26,7 +26,7 @@ class ParamsReportRequest extends FormRequest
             'type' => 'nullable|string|in:income,expense',
             'group' => ['nullable', 'string', new IncomeOrExpenseGroupExists()],
             'schedule' => 'nullable|string|exists:schedules,type',
-            'end_date' => 'nullable|date|date_format:Y-m-d'
+            'end_date' => 'nullable|date|date_format:Y-m-d',
         ];
     }
 }

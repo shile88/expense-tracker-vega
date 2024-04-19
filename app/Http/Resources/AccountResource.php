@@ -20,7 +20,7 @@ class AccountResource extends JsonResource
             'balance' => $this->balance,
             'type' => $this->type,
             'expense_end_date' => $this->expense_end_date,
-            'expense_budget' => $this->expense_budget
+            'expense_budget' => $this->expense_budget,
         ];
     }
 }

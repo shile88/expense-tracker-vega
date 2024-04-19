@@ -18,7 +18,7 @@ class IncomeGroupFactory extends Factory
     {
         return [
             'account_id' => 1,
-            'name' => 'kirija'
+            'name' => 'kirija',
         ];
     }
 }

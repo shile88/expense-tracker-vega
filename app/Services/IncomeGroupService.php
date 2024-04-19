@@ -6,7 +6,6 @@ use App\Models\Account;
 use App\Models\IncomeGroup;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Support\Facades\Log;
 
 class IncomeGroupService
@@ -25,7 +24,7 @@ class IncomeGroupService
     {
         $incomeGroup = IncomeGroup::create([
             'name' => $validatedRequest['name'],
-            'account_id' => $account->id
+            'account_id' => $account->id,
         ]);
 
         Log::info('New income group created', ['user' => auth()->id(), 'data' => $incomeGroup]);

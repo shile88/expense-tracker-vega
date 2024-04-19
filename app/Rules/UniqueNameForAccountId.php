@@ -8,10 +8,10 @@ use Illuminate\Contracts\Validation\ValidationRule;
 
 class UniqueNameForAccountId implements ValidationRule
 {
-
     public function __construct(protected $account)
     {
     }
+
     /**
      * Run the validation rule.
      *
@@ -23,7 +23,8 @@ class UniqueNameForAccountId implements ValidationRule
             ->where('name', $value)
             ->exists();
 
-        if($checkName)
+        if ($checkName) {
             $fail('The :attribute has already been taken for this account.');
+        }
     }
 }

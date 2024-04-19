@@ -19,7 +19,7 @@ class ExpenseResource extends JsonResource
             'amount' => $this->amount,
             'schedule' => ScheduleResource::make($this->schedule),
             'expense_group' => ExpenseGroupResource::make($this->expenseGroup),
-            'expense_date' => $this->expense_date
+            'expense_date' => $this->expense_date,
         ];
     }
 }

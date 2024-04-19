@@ -16,7 +16,7 @@ class TransactionStartRule implements ValidationRule
     {
         $scheduleId = request()->input('schedule_id');
         $allowedValues = null;
-    
+
         switch ($scheduleId) {
             case 1:
                 $allowedValues = ['empty'];
@@ -33,9 +33,9 @@ class TransactionStartRule implements ValidationRule
             default:
                 return;
         }
-    
+
         $allowedValuesString = implode(', ', $allowedValues);
-        if (!in_array($value, $allowedValues)) {
+        if (! in_array($value, $allowedValues)) {
             $fail(":attribute must be $allowedValuesString for the given schedule_id.");
         }
     }

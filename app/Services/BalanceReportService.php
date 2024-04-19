@@ -5,10 +5,7 @@ namespace App\Services;
 use App\Models\Account;
 use App\Models\Expense;
 use App\Models\Income;
-use App\Models\Transaction;
 use App\Models\User;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 
 class BalanceReportService
 {
@@ -38,10 +35,10 @@ class BalanceReportService
 
         $expenseGroupBudget = $expense->expenseGroup->group_budget;
 
-        if ($expensesSum >= $expenseGroupBudget)
+        if ($expensesSum >= $expenseGroupBudget) {
             return [$expensesSum, $expenseGroupBudget];
+        }
 
-        return;
     }
 
     public function sendWeeklyAndMonthlyEmail()

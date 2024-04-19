@@ -2,8 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
-use DateTime;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,9 +16,9 @@ class AccountFactory extends Factory
      */
     public function definition(): array
     {
-       return [
-         'user_id' => 1,
-         'type' => 'savings'
-       ];
+        return [
+            'user_id' => 1,
+            'type' => 'savings',
+        ];
     }
 }

@@ -39,7 +39,7 @@ class ExpenseGroupBudgetExceeded extends Notification implements ShouldQueue
             'expenseSum' => $this->expensesSum,
             'budgetCap' => $this->expenseGroupBudget,
             'expense' => $this->expense,
-            'expenseGroup' => $this->expenseGroup
+            'expenseGroup' => $this->expenseGroup,
         ]);
     }
 

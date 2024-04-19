@@ -24,10 +24,10 @@ class ExpenseFactory extends Factory
         $date = fake()->boolean(50) ? null : fake()->dateTimeBetween('now', $endOfMonth)->format('Y-m-d');
 
         return [
-           'expense_group_id' => fake()->numberBetween(1,10),
-           'amount' => fake()->randomElement($amount),
-           'schedule_id' => (random_int(1, 2) <= 1) ? random_int(1, 2) : null,
-           'expense_date' => $date
+            'expense_group_id' => fake()->numberBetween(1, 10),
+            'amount' => fake()->randomElement($amount),
+            'schedule_id' => (random_int(1, 2) <= 1) ? random_int(1, 2) : null,
+            'expense_date' => $date,
         ];
     }
 }

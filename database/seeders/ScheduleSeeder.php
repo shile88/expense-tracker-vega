@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Schedule;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class ScheduleSeeder extends Seeder
@@ -14,16 +13,16 @@ class ScheduleSeeder extends Seeder
     public function run(): void
     {
         Schedule::create([
-            'type' => 'onetime'
+            'type' => 'onetime',
         ]);
         Schedule::create([
-            'type' => 'daily'
+            'type' => 'daily',
         ]);
         Schedule::create([
-            'type' => 'weekly'
+            'type' => 'weekly',
         ]);
         Schedule::create([
-            'type' => 'monthly'
+            'type' => 'monthly',
         ]);
     }
 }

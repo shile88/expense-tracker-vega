@@ -13,7 +13,7 @@ class ExpenseGroupPolicy
 {
     public function create(User $user, StoreExpenseGroupRequest $request)
     {
-       return $this->checkExpenseGroupStoreOrUpdatePermission($user, $request);
+        return $this->checkExpenseGroupStoreOrUpdatePermission($user, $request);
     }
 
     public function update(User $user, ExpenseGroup $expenseGroup, UpdateExpenseGroupRequest $request)
@@ -23,8 +23,9 @@ class ExpenseGroupPolicy
 
     public function checkExpenseGroupStoreOrUpdatePermission($user, $request)
     {
-        if($user->type === 'basic' && ($request->input('group_budget'))) {
+        if ($user->type === 'basic' && ($request->input('group_budget'))) {
             Log::info('User type basic cant add group budget', ['user_id' => $user->id]);
+
             return Response::deny('User cant add group budget');
         }
 
@@ -32,6 +33,7 @@ class ExpenseGroupPolicy
         //     return Response::deny('Choose one value between schedule_id and expense_date');
         // }
         Log::info('Premium user allowed to add group budget', ['user_id' => $user->id]);
+
         return true;
     }
 }

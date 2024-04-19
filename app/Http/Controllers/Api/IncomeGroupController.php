@@ -17,6 +17,7 @@ class IncomeGroupController extends Controller
     public function __construct(protected IncomeGroupService $incomeGroupService)
     {
     }
+
     /**
      * Display a listing of the resource.
      */
@@ -29,7 +30,7 @@ class IncomeGroupController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'No income groups for this account.',
-                'data' => []
+                'data' => [],
             ], Response::HTTP_OK);
         } else {
             return response()->json([
@@ -41,9 +42,9 @@ class IncomeGroupController extends Controller
                         'total' => $incomeGroups->total(),
                         'per_page' => $incomeGroups->perPage(),
                         'current_page' => $incomeGroups->currentPage(),
-                        'last_page' => $incomeGroups->lastPage()
-                    ]
-                ]
+                        'last_page' => $incomeGroups->lastPage(),
+                    ],
+                ],
             ], Response::HTTP_OK);
         }
     }
@@ -62,7 +63,7 @@ class IncomeGroupController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Income groupe created.',
-            'data' => $newIncomeGroup
+            'data' => $newIncomeGroup,
         ], Response::HTTP_CREATED);
     }
 
@@ -76,7 +77,7 @@ class IncomeGroupController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Your income group.',
-            'data' => IncomeGroupResource::make($incomeGroup)
+            'data' => IncomeGroupResource::make($incomeGroup),
         ], Response::HTTP_OK);
     }
 
@@ -92,7 +93,7 @@ class IncomeGroupController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Updated successfully',
-            'data' => IncomeGroupResource::make($updatedIncomeGroup)
+            'data' => IncomeGroupResource::make($updatedIncomeGroup),
         ], Response::HTTP_OK);
     }
 
@@ -108,7 +109,7 @@ class IncomeGroupController extends Controller
         return response()->json([
             'success' => true,
             'message' => "Income group with id:$incomeGroup->id delete successfully",
-            'data' => []
+            'data' => [],
         ], Response::HTTP_OK);
     }
 }

@@ -2,17 +2,14 @@
 
 namespace App\Services;
 
-use App\Events\IncomeCreated;
 use App\Models\Account;
 use App\Models\Income;
 use App\Models\IncomeGroup;
-use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Log;
 
-class IncomeService {
-
+class IncomeService
+{
     public function index(Account $account, IncomeGroup $incomeGroup): LengthAwarePaginator
     {
         return Income::where('income_group_id', $incomeGroup->id)->paginate(5);
@@ -25,7 +22,7 @@ class IncomeService {
             'schedule_id' => $validatedRequest['schedule_id'] ?? null,
             'end_date' => $validatedRequest['end_date'] ?? null,
             'income_group_id' => $incomeGroup->id,
-            'transaction_start' => $validatedRequest['transaction_start'] ?? null
+            'transaction_start' => $validatedRequest['transaction_start'] ?? null,
         ]);
 
         Log::info('New income created', ['user' => auth()->id(), 'data' => $income]);

@@ -4,7 +4,6 @@ namespace App\Http\Requests;
 
 use App\Rules\TransactionStartRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class StoreIncomeRequest extends FormRequest
 {
@@ -30,7 +29,7 @@ class StoreIncomeRequest extends FormRequest
             'transaction_start' => [
                 'nullable',
                 'integer',
-                new TransactionStartRule()
+                new TransactionStartRule(),
             ],
         ];
     }

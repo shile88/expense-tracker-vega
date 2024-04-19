@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use DateTime;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,9 +17,9 @@ class IncomeFactory extends Factory
     public function definition(): array
     {
         return [
-           'income_group_id' => 1,
-           'amount' => 50,
-           'schedule_id' => 1
+            'income_group_id' => 1,
+            'amount' => 50,
+            'schedule_id' => 1,
         ];
     }
 }

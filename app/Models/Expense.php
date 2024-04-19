@@ -32,7 +32,7 @@ class Expense extends Model
     public function scopeSearch($query, $validatedRequest, $account)
     {
         if (empty($validatedRequest['type'])) {
-            return  $query->leftJoin('expense_groups', 'expenses.expense_group_id', '=', 'expense_groups.id')
+            return $query->leftJoin('expense_groups', 'expenses.expense_group_id', '=', 'expense_groups.id')
                 ->where('expense_groups.account_id', $account->id);
         }
 

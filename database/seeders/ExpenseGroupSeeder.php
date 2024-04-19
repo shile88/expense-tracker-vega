@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\ExpenseGroup;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class ExpenseGroupSeeder extends Seeder
@@ -13,6 +12,6 @@ class ExpenseGroupSeeder extends Seeder
      */
     public function run(): void
     {
-       ExpenseGroup::factory(10)->create();
+        ExpenseGroup::factory(10)->create();
     }
 }

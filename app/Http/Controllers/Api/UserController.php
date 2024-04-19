@@ -23,14 +23,15 @@ class UserController extends Controller
 
         $newUser = $this->userService->register($validatedRequest);
 
-        if ($newUser)
+        if ($newUser) {
             return response()->json([
                 'success' => true,
                 'message' => 'User created successfully',
                 'data' => [
-                    'user' => $newUser
-                ]
+                    'user' => $newUser,
+                ],
             ], Response::HTTP_CREATED);
+        }
     }
 
     public function login(UserLoginRequest $request): JsonResponse
@@ -49,8 +50,8 @@ class UserController extends Controller
                 'message' => 'Logged in successfully',
                 'data' => [
                     'user' => $user,
-                    'access_token' => $token
-                ]
+                    'access_token' => $token,
+                ],
             ], Response::HTTP_OK);
         } else {
             return response()->json([
@@ -68,7 +69,7 @@ class UserController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Logged out successfully'
+            'message' => 'Logged out successfully',
         ], Response::HTTP_OK);
     }
 }

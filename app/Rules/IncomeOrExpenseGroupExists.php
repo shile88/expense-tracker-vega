@@ -18,7 +18,8 @@ class IncomeOrExpenseGroupExists implements ValidationRule
     {
         $isIncomeGroup = IncomeGroup::where('name', $value)->exists() || ExpenseGroup::where('name', $value)->exists();
 
-        if(!$isIncomeGroup)
+        if (! $isIncomeGroup) {
             $fail('The selected group name does not exist in database.');
+        }
     }
 }

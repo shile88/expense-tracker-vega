@@ -24,7 +24,7 @@ class StoreExpenseGroupRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'alpha', new UniqueNameForAccountId($this->account)],
-            'group_budget' => 'nullable|integer|min:10'
+            'group_budget' => 'nullable|integer|min:10',
         ];
     }
 }

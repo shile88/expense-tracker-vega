@@ -12,7 +12,7 @@ class Transaction extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['account_id', 'transactionable_type', 'transactionable_id','amount', 'is_added_to_balance'];
+    protected $fillable = ['account_id', 'transactionable_type', 'transactionable_id', 'amount', 'is_added_to_balance'];
 
     public function transactionable(): MorphTo
     {

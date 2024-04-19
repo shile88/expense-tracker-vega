@@ -22,7 +22,7 @@ class ExpenseGroupFactory extends Factory
         return [
             'name' => fake()->randomElement($expense),
             'group_budget' => fake()->randomElement($budget),
-            'account_id' => fake()->numberBetween(1,10)
+            'account_id' => fake()->numberBetween(1, 10),
         ];
     }
 }

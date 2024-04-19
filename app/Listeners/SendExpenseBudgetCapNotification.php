@@ -5,8 +5,6 @@ namespace App\Listeners;
 use App\Events\ExpenseGroupBudgetCap;
 use App\Notifications\ExpenseGroupBudgetExceeded;
 use App\Services\BalanceReportService;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Notification;
 
 class SendExpenseBudgetCapNotification
@@ -26,7 +24,7 @@ class SendExpenseBudgetCapNotification
     {
         $data = $this->balanceReportService->calculateExpenseBudgetCap($event->expense);
 
-        if($data) {
+        if ($data) {
             [$expensesSum, $expenseGroupBudget] = $data;
             Notification::send(auth()->user(), new ExpenseGroupBudgetExceeded($expensesSum, $expenseGroupBudget, $event->expense, $event->expense->expenseGroup->name));
         }

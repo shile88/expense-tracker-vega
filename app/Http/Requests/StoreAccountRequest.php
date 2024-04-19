@@ -25,7 +25,7 @@ class StoreAccountRequest extends FormRequest
             'balance' => 'nullable|integer',
             'type' => 'required|string|in:checking,savings,business|unique:accounts,type,NULL,id,deleted_at,NULL',
             'expense_end_date' => 'nullable|date|after_or_equal:today',
-            'expense_budget' => 'nullable|integer|min:10'
+            'expense_budget' => 'nullable|integer|min:10',
         ];
     }
 
@@ -33,7 +33,7 @@ class StoreAccountRequest extends FormRequest
     {
         return [
             'type.unique' => 'Account already exists with same type',
-            'type.in' => 'Allowed account type are checking, savings, business'
+            'type.in' => 'Allowed account type are checking, savings, business',
         ];
     }
 }

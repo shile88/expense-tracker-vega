@@ -17,7 +17,7 @@ class IncomeGroupResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'account_id' => $this->account_id
+            'account_id' => $this->account_id,
         ];
     }
 }

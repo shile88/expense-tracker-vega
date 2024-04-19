@@ -9,18 +9,17 @@ use App\Models\Account;
 use App\Models\Expense;
 use App\Models\ExpenseGroup;
 use App\Services\ExpenseService;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 
 class ExpenseController
 {
-
     public function __construct(protected ExpenseService $expenseService)
     {
-        
+
     }
+
     /**
      * Display a listing of the resource.
      */
@@ -28,7 +27,7 @@ class ExpenseController
     {
         $allExpenses = $this->expenseService->index($account, $expenseGroup);
 
-        if($allExpenses)
+        if ($allExpenses) {
             return response()->json([
                 'success' => true,
                 'message' => 'Show all expenses.',
@@ -38,16 +37,17 @@ class ExpenseController
                         'total' => $allExpenses['total'],
                         'per_page' => $allExpenses['perPage'],
                         'current_page' => $allExpenses['currentPage'],
-                        'last_page' => $allExpenses['lastPage']
-                    ]
-                ]
+                        'last_page' => $allExpenses['lastPage'],
+                    ],
+                ],
             ], Response::HTTP_OK);
-        else
+        } else {
             return response()->json([
                 'success' => true,
                 'message' => 'No expense data.',
-                'data' => [] 
+                'data' => [],
             ], Response::HTTP_OK);
+        }
     }
 
     /**
@@ -60,15 +60,16 @@ class ExpenseController
         $validatedRequest = $request->validated();
 
         Log::info('User is trying to create expense with validated data', ['user_id' => auth()->id(), 'data' => $validatedRequest]);
-      
+
         $newExpense = $this->expenseService->store($validatedRequest, $expenseGroup);
-       
-        if($newExpense)
+
+        if ($newExpense) {
             return response()->json([
                 'success' => true,
                 'message' => 'Expense created successfully',
-                'data' => ExpenseResource::make($newExpense)
+                'data' => ExpenseResource::make($newExpense),
             ], Response::HTTP_CREATED);
+        }
     }
 
     /**
@@ -81,7 +82,7 @@ class ExpenseController
         return response()->json([
             'success' => true,
             'message' => 'Your expense.',
-            'data' => ExpenseResource::make($expense)
+            'data' => ExpenseResource::make($expense),
         ], Response::HTTP_OK);
     }
 
@@ -99,7 +100,7 @@ class ExpenseController
         return response()->json([
             'success' => true,
             'message' => 'Expense updated successfully',
-            'data' => ExpenseResource::make($updatedExpense)
+            'data' => ExpenseResource::make($updatedExpense),
         ], Response::HTTP_OK);
     }
 
@@ -114,7 +115,7 @@ class ExpenseController
 
         return response()->json([
             'success' => true,
-            'message' => "Expense with id:$expense->id delete successfully"
+            'message' => "Expense with id:$expense->id delete successfully",
         ], Response::HTTP_OK);
     }
 }

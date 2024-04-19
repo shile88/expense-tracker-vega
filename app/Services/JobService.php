@@ -46,24 +46,24 @@ class JobService
     {
         $incomeOrExpenseTransactions = $this->queryIncomeOrExpense($model);
 
-        Log::info('Successful ' . $type . ' query');
+        Log::info('Successful '.$type.' query');
 
         foreach ($incomeOrExpenseTransactions as $incomeOrExpenseTransaction) {
-            $account = $incomeOrExpenseTransaction->{$type . 'Group'}->account;
+            $account = $incomeOrExpenseTransaction->{$type.'Group'}->account;
 
             try {
                 if ($this->shouldAddIncomeOrExpenseToTransactions($incomeOrExpenseTransaction)) {
                     $this->addIncomeOrExpenseToTransactions($incomeOrExpenseTransaction, $account);
-                    Log::info('Added ' . $type . ' to transactions', ['id' => $incomeOrExpenseTransaction->id]);
+                    Log::info('Added '.$type.' to transactions', ['id' => $incomeOrExpenseTransaction->id]);
                     $transactionIds[] = $incomeOrExpenseTransaction->id;
                 }
             } catch (\Exception $e) {
-                Log::error('Error processing ' . $type . 's', ['id' => $incomeOrExpenseTransaction->id, 'error' => $e->getMessage()]);
+                Log::error('Error processing '.$type.'s', ['id' => $incomeOrExpenseTransaction->id, 'error' => $e->getMessage()]);
             }
         }
 
-        if (!empty($transactionIds)) {
-            Log::info('Starting to add ' . $type . ' amount to balance', ['id' => $transactionIds]);
+        if (! empty($transactionIds)) {
+            Log::info('Starting to add '.$type.' amount to balance', ['id' => $transactionIds]);
             UpdateAccountBalance::dispatch($transactionIds, $account);
         }
     }
@@ -107,6 +107,7 @@ class JobService
                         $endOfMonth !== null && Carbon::now()->endOfMonth()->toDateString() == $endOfMonth);
             default:
                 Log::warning('Unknown schedule type', ['schedule_type' => $scheduleType]);
+
                 return false;
         }
     }
@@ -119,7 +120,7 @@ class JobService
                     'amount' => $model->amount,
                     'account_id' => $account->id,
                     'transactionable_id' => $model->id,
-                    'transactionable_type' => get_class($model)
+                    'transactionable_type' => get_class($model),
                 ]);
             }
         } else {
@@ -127,7 +128,7 @@ class JobService
                 'amount' => $model->amount,
                 'account_id' => $account->id,
                 'transactionable_id' => $model->id,
-                'transactionable_type' => get_class($model)
+                'transactionable_type' => get_class($model),
             ]);
         }
     }

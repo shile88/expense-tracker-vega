@@ -7,10 +7,9 @@ use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserRegisterRequest;
 use App\Models\User;
 use App\Services\UserService;
-use Illuminate\Http\JsonResponse;
-use Tests\TestCase;
 use Mockery;
 use Mockery\MockInterface;
+use Tests\TestCase;
 
 class AuthTest extends TestCase
 {
@@ -67,7 +66,7 @@ class AuthTest extends TestCase
         $this->assertTrue($responseData['success']);
         $this->assertEquals('User created successfully', $responseData['message']);
         $this->assertEquals('test', $responseData['data']['user']['name']);
-        $this->assertEquals('test@test.com', $responseData['data']['user']['email']); 
+        $this->assertEquals('test@test.com', $responseData['data']['user']['email']);
     }
 
     public function testRegisterUserLogout(): void

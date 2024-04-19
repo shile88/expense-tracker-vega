@@ -20,7 +20,7 @@ class ExpenseService
     {
         $expense = Expense::create([
             'expense_group_id' => $expenseGroup->id,
-            ...$validatedRequest
+            ...$validatedRequest,
         ]);
 
         Log::info('New expense created', ['user_id' => auth()->id(), 'data' => $expense]);
