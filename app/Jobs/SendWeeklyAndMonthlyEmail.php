@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\User;
 use App\Notifications\WeeklyOrMonthlyEmailNotification;
 use App\Services\BalanceReportService;
 use Illuminate\Bus\Queueable;
@@ -30,15 +31,16 @@ class SendWeeklyAndMonthlyEmail implements ShouldQueue
         $allAccounts = $balanceReportService->sendWeeklyAndMonthlyEmail();
 
         foreach ($allAccounts as $account) {
-            $account->user->notify(new WeeklyOrMonthlyEmailNotification(
-                $account->user,
-                $account->totalIncome,
-                $account->totalExpense,
-                $account->balance,
-                $account->id,
-                $account->type,
-                $account->totalIncome - $account->totalExpense
-            ));
+            $user = User::find($account['user_id']);
+                $user->notify(new WeeklyOrMonthlyEmailNotification(
+                    $account['user_id'],
+                    $account['totalIncome'],
+                    $account['totalExpense'],
+                    $account['balance'],
+                    $account['id'],
+                    $account['type'],
+                    $account['totalIncome'] - $account['totalExpense']
+                ));
         }
     }
 }

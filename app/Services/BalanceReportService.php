@@ -54,7 +54,7 @@ class BalanceReportService
 
         $allAccounts = [];
 
-        $users = User::with('accounts.incomeGroups.incomes', 'accounts.expenseGroups.expenses')->get();
+        $users = User::where('type', 'premium')->with('accounts.incomeGroups.incomes', 'accounts.expenseGroups.expenses')->get();
 
         foreach ($users as $user) {
             $userAccounts = $user->accounts->map(function ($account) use ($startDate, $endDate) {
@@ -69,7 +69,7 @@ class BalanceReportService
 
             $allAccounts = array_merge($allAccounts, $userAccounts->toArray());
         }
-
+       
         return $allAccounts;
     }
 }

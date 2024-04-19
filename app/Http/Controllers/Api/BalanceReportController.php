@@ -31,17 +31,17 @@ class BalanceReportController
                         'incomes' => $incomes->total() > 1
                             ? [IncomeResource::collection($incomes),
                                 'pagination' => [
-                                    'total' => $incomes['total'],
-                                    'per_page' => $incomes['perPage'],
-                                    'current_page' => $incomes['currentPage'],
-                                    'last_page' => $incomes['lastPage'],
+                                    'total' => $incomes->total(),
+                                    'per_page' => $incomes->perPage(),
+                                    'current_page' => $incomes->currentPage(),
+                                    'last_page' => $incomes->lastPage(),
                                 ]]
                             : $incomes[0],
                     ],
                 ]);
             }
 
-            if (empty($income) && $expenses) {
+            if (empty($incomes) && $expenses) {
                 return response()->json([
                     'success' => true,
                     'message' => 'Your expenses data',
@@ -49,10 +49,10 @@ class BalanceReportController
                         'expenses' => $expenses->total() > 1
                             ? [ExpenseResource::collection($expenses),
                                 'pagination' => [
-                                    'total' => $expenses['total'],
-                                    'per_page' => $expenses['perPage'],
-                                    'current_page' => $expenses['currentPage'],
-                                    'last_page' => $expenses['lastPage'],
+                                    'total' => $expenses->total(),
+                                    'per_page' => $expenses->perPage(),
+                                    'current_page' => $expenses->currentPage(),
+                                    'last_page' => $expenses->lastPage(),
                                 ]]
                             : $expenses[0],
                     ],
@@ -67,19 +67,19 @@ class BalanceReportController
                         'incomes' => $incomes->total() > 1
                             ? [IncomeResource::collection($incomes),
                                 'pagination' => [
-                                    'total' => $incomes['total'],
-                                    'per_page' => $incomes['perPage'],
-                                    'current_page' => $incomes['currentPage'],
-                                    'last_page' => $incomes['lastPage'],
+                                    'total' => $incomes->total(),
+                                    'per_page' => $incomes->perPage(),
+                                    'current_page' => $incomes->currentPage(),
+                                    'last_page' => $incomes->lastPage(),
                                 ]]
                             : $incomes[0],
                         'expenses' => $expenses->total() > 1
                             ? [ExpenseResource::collection($expenses),
                                 'pagination' => [
-                                    'total' => $expenses['total'],
-                                    'per_page' => $expenses['perPage'],
-                                    'current_page' => $expenses['currentPage'],
-                                    'last_page' => $expenses['lastPage'],
+                                    'total' => $expenses->total(),
+                                    'per_page' => $expenses->perPage(),
+                                    'current_page' => $expenses->currentPage(),
+                                    'last_page' => $expenses->lastPage(),
                                 ]]
                             : $expenses[0],
                     ],

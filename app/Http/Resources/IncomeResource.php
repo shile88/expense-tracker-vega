@@ -20,7 +20,7 @@ class IncomeResource extends JsonResource
             'amount' => $this->amount,
             'schedule' => ScheduleResource::make($this->schedule),
             'income_group' => IncomeGroupResource::make($this->incomeGroup),
-            'income_date' => $this->income_date,
+            'end_date' => $this->end_date,
         ];
     }
 }
