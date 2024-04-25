@@ -48,4 +48,38 @@ class ExpenseService
 
         Log::info('User deleted expense', ['user_id' => auth()->id(), 'expense_id' => $expense->id]);
     }
+
+    public function checkExpenseBudget($expense)
+    {
+        $account = $expense->incomeGroup->account;
+        $expenseBudgetStartDate = $account->expense_start_date;
+        $expenseBudgetEndDate = $account->expense_end_date;
+        $user = $account->user;
+
+        $query = Expense::query()->leftJoin('expense_groups', 'expenses.expense_group_id', '=', 'expense_groups.id')
+            ->where('account_id', $account->id);
+    
+            if ($expenseBudgetStartDate && $expenseBudgetEndDate) {
+                $query->whereBetween('created_at', [$expenseBudgetStartDate, $expenseBudgetEndDate]);
+            } elseif ($expenseBudgetStartDate) {
+                $query->where('created_at', '>=', $expenseBudgetStartDate);
+            } elseif ($expenseBudgetEndDate) {
+                $query->where('created_at', '<=', $expenseBudgetEndDate);
+            }
+
+        $totalExpense = $query->sum('amount');
+
+        if ($totalExpense && $totalExpense >= $account->expense_budget) {
+            return [
+                'totalExpense' => $totalExpense,
+                'expenseBudgetStartDate' => $expenseBudgetStartDate,
+                'expenseBudgetEndDate' => $expenseBudgetEndDate,
+                'accountId' => $account->id,
+                'accountBudget' => $account->expense_budget,
+                'user' => $user
+            ];
+        } else {
+            return null;
+        }
+    }
 }
