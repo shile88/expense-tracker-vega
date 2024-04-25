@@ -1,5 +1,6 @@
 <?php
 
+use App\Jobs\ProcessMonthlySaving;
 use App\Jobs\ScheduledTransaction;
 use App\Jobs\SendWeeklyAndMonthlyEmail;
 use Illuminate\Console\Scheduling\Schedule;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Http\Middleware\CheckAbilities;
 use Laravel\Sanctum\Http\Middleware\CheckForAnyAbility;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -29,13 +31,13 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withSchedule(function (Schedule $schedule) {
-        $schedule->job(new ScheduledTransaction)->daily()->onSuccess(function () {
+        $schedule->job(new ScheduledTransaction)->monthly()->onSuccess(function () {
             Log::info('Scheduled transactions job started successfully');
         })->onFailure(function () {
             Log::error('Scheduled transactions job interrupted');
         });
 
-        $schedule->job(new SendWeeklyAndMonthlyEmail)->everyThirtySeconds()->onSuccess(function () {
+        $schedule->job(new SendWeeklyAndMonthlyEmail)->monthly()->onSuccess(function () {
             Log::info('Scheduled job for sending weekly email successfully');
         })->onFailure(function () {
             Log::error('Scheduled job for sending weekly email interrupted');
@@ -45,6 +47,12 @@ return Application::configure(basePath: dirname(__DIR__))
             Log::info('Scheduled job for sending monthly email successfully');
         })->onFailure(function () {
             Log::error('Scheduled job for sending monthly email interrupted');
+        });
+
+        $schedule->job(new ProcessMonthlySaving)->everyThirtySeconds()->onSuccess(function () {
+            Log::info('Scheduled job for processing monthly savings successfully');
+        })->onFailure(function () {
+            Log::error('Scheduled job for processing monthly savings interrupted');
         });
     })
     ->withExceptions(function (Exceptions $exceptions) {
@@ -62,6 +70,18 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $exceptions->render(function (AccessDeniedHttpException $e, Request $request) {
+            if ($request->is('api/*')) {
+
+                Log::info('Access denied for this user', ['user_id' => auth()->id(), 'exception' => $e]);
+
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage(),
+                ], $e->getStatusCode());
+            }
+        });
+
+        $exceptions->render(function (HttpException $e, Request $request) {
             if ($request->is('api/*')) {
 
                 Log::info('Access denied for this user', ['user_id' => auth()->id(), 'exception' => $e]);
