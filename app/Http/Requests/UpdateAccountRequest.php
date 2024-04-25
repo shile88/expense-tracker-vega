@@ -24,8 +24,8 @@ class UpdateAccountRequest extends FormRequest
     {
         return [
             'balance' => 'nullable|integer',
-            'expense_start_date' => ['nullable','date','after_or_equal:today', new CheckIsPremiumUser],
-            'expense_end_date' => ['nullable','date','after_or_equal:expense_start_date', new CheckIsPremiumUser],
+            'expense_start_date' => ['nullable', 'date', 'after_or_equal:today', new CheckIsPremiumUser],
+            'expense_end_date' => ['nullable', 'date', 'after_or_equal:expense_start_date', new CheckIsPremiumUser],
             'expense_budget' => ['nullable', 'integer', 'min:10', new CheckIsPremiumUser],
             'type' => 'nullable|string|in:checking,savings,business',
         ];

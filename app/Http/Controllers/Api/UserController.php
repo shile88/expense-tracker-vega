@@ -81,10 +81,10 @@ class UserController extends Controller
 
         $isReminderUpdated = $this->userService->activateReminder($validatedRequest);
 
-        if($isReminderUpdated) {
+        if ($isReminderUpdated) {
             return response()->json([
                 'success' => true,
-                'message' => 'Reminder updated successfully'
+                'message' => 'Reminder updated successfully',
             ]);
         }
     }

@@ -17,9 +17,9 @@ class CheckIsPremiumUser
     {
         $account = $request->route('account');
 
-        if($account->user->type === 'premium') {
+        if ($account->user->type === 'premium') {
             return $next($request);
-        }  
+        }
 
         abort(403, 'Only premium users can use savings feature.');
     }

@@ -14,8 +14,8 @@ class CheckIsUserPremium implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if(!auth()->user()->type === 'premium') {
-           $fail('Only premium users can set expense start, end date and budget');
+        if (! auth()->user()->type === 'premium') {
+            $fail('Only premium users can set expense start, end date and budget');
         }
     }
 }

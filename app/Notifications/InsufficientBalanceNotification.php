@@ -3,7 +3,6 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -44,7 +43,7 @@ class InsufficientBalanceNotification extends Notification
             'monthlySavingId' => $this->remainingMonthlySavingId,
             'difference' => $this->difference,
             'numberOfRemainingSaving' => $this->numberOfRemainingMonthlySavings,
-            'amountToAdd' => $this->amountToAdd
+            'amountToAdd' => $this->amountToAdd,
         ]);
     }
 

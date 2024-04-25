@@ -11,7 +11,7 @@ class StoreReminderRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if(auth()->user()->type === 'premium') {
+        if (auth()->user()->type === 'premium') {
             return true;
         }
 
@@ -26,7 +26,7 @@ class StoreReminderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'reminder' => 'required|boolean'
+            'reminder' => 'required|boolean',
         ];
     }
 }

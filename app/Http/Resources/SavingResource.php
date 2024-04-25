@@ -19,7 +19,7 @@ class SavingResource extends JsonResource
             'account' => AccountResource::make($this->account),
             'save_goal' => $this->save_goal,
             'save_end_data' => $this->save_end_date,
-            'schedule' => ScheduleResource::make($this->schedule)
+            'schedule' => ScheduleResource::make($this->schedule),
         ];
     }
 }

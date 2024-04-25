@@ -17,8 +17,8 @@ class SavingService
         $currentDate = Carbon::now();
         $currentDate->startOfMonth()->addMonth();
 
-        $totalIncome = $account->incomeGroups->flatMap->incomes->where('end_date', '<=',  $endDate)->sum('amount');
-        $totalExpense = $account->expenseGroups->flatMap->expenses->where('end_date', '<=',  $endDate)->sum('amount');
+        $totalIncome = $account->incomeGroups->flatMap->incomes->where('end_date', '<=', $endDate)->sum('amount');
+        $totalExpense = $account->expenseGroups->flatMap->expenses->where('end_date', '<=', $endDate)->sum('amount');
         $totalSavingsByMonth = MonthlySaving::query()
             ->leftJoin('savings', 'monthly_savings.saving_id', '=', 'savings.id')
             ->where('account_id', $account->id)
@@ -36,15 +36,16 @@ class SavingService
             $saveAmountByMonth = $validatedRequest['save_goal'] / count($months);
             $saving = Saving::create([
                 'account_id' => $account->id,
-                ...$validatedRequest
+                ...$validatedRequest,
             ]);
             foreach ($months as $month) {
                 MonthlySaving::create([
                     'saving_id' => $saving->id,
                     'amount' => $saveAmountByMonth,
-                    'month' => $month
+                    'month' => $month,
                 ]);
             }
+
             return $saving;
         } else {
             return false;
@@ -69,9 +70,9 @@ class SavingService
 
                     $isMonthlySavingCompleted = MonthlySaving::where('saving_id', $savingId)->where('is_completed', false)->exists();
 
-                    if (!$isMonthlySavingCompleted) {
+                    if (! $isMonthlySavingCompleted) {
                         $account->update([
-                            'balance' => $account->balance + $saveGoal
+                            'balance' => $account->balance + $saveGoal,
                         ]);
                         $account->user->notify(new SaveGoalReached($account->id, $account->balance, $saveGoal));
                     }
@@ -83,7 +84,7 @@ class SavingService
 
                     foreach ($remainingMonthlySavings as $remainingMonthlySaving) {
                         $remainingMonthlySaving->update([
-                            'amount' => $remainingMonthlySaving->amount + $amountToAdd
+                            'amount' => $remainingMonthlySaving->amount + $amountToAdd,
                         ]);
                         $account->user->notify(new InsufficientBalanceNotification(
                             $account->id,

@@ -40,7 +40,7 @@ class TotalExpenseBudgetExceeded extends Notification implements ShouldQueue
             'expenseBudgetEndDate' => $this->expenseBudgetEndDate,
             'expense' => $this->expense->amount,
             'accountId' => $this->accountId,
-            'accountBudget' => $this->accountBudget
+            'accountBudget' => $this->accountBudget,
         ]);
     }
 

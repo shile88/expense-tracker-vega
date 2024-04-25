@@ -26,6 +26,6 @@ class ProcessMonthlySaving implements ShouldQueue
      */
     public function handle(SavingService $savingService): void
     {
-       $savingService->processMonthlySaving();
+        $savingService->processMonthlySaving();
     }
 }

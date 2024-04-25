@@ -34,10 +34,10 @@ class SaveGoalReached extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)->markdown('mail.save-goal.reached' , [
+        return (new MailMessage)->markdown('mail.save-goal.reached', [
             'accountId' => $this->accountId,
             'amount' => $this->saveGoal,
-            'balance' => $this->balance
+            'balance' => $this->balance,
         ]);
     }
 

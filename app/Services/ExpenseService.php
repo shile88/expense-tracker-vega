@@ -58,14 +58,14 @@ class ExpenseService
 
         $query = Expense::query()->leftJoin('expense_groups', 'expenses.expense_group_id', '=', 'expense_groups.id')
             ->where('account_id', $account->id);
-    
-            if ($expenseBudgetStartDate && $expenseBudgetEndDate) {
-                $query->whereBetween('created_at', [$expenseBudgetStartDate, $expenseBudgetEndDate]);
-            } elseif ($expenseBudgetStartDate) {
-                $query->where('created_at', '>=', $expenseBudgetStartDate);
-            } elseif ($expenseBudgetEndDate) {
-                $query->where('created_at', '<=', $expenseBudgetEndDate);
-            }
+
+        if ($expenseBudgetStartDate && $expenseBudgetEndDate) {
+            $query->whereBetween('created_at', [$expenseBudgetStartDate, $expenseBudgetEndDate]);
+        } elseif ($expenseBudgetStartDate) {
+            $query->where('created_at', '>=', $expenseBudgetStartDate);
+        } elseif ($expenseBudgetEndDate) {
+            $query->where('created_at', '<=', $expenseBudgetEndDate);
+        }
 
         $totalExpense = $query->sum('amount');
 
@@ -76,7 +76,7 @@ class ExpenseService
                 'expenseBudgetEndDate' => $expenseBudgetEndDate,
                 'accountId' => $account->id,
                 'accountBudget' => $account->expense_budget,
-                'user' => $user
+                'user' => $user,
             ];
         } else {
             return null;

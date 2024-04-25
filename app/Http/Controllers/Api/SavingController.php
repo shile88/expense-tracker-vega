@@ -10,28 +10,28 @@ use Illuminate\Http\Response;
 
 class SavingController
 {
-    public function __construct(protected SavingService $savingService )
+    public function __construct(protected SavingService $savingService)
     {
-        
+
     }
 
     public function create(StoreSavingRequest $request, Account $account)
     {
         $saving = $this->savingService->createSaving($request->validated(), $account);
 
-        if($saving) {
+        if ($saving) {
             return response()->json([
                 'success' => true,
                 'message' => 'Your saving is successfully created',
                 'data' => [
-                    'saving' => SavingResource::make($saving)
-                ]
+                    'saving' => SavingResource::make($saving),
+                ],
             ], Response::HTTP_CREATED);
         } else {
             return response()->json([
                 'success' => false,
                 'message' => 'Could not create saving. Please check do you have enough funds.',
-                'data' => []
+                'data' => [],
             ], Response::HTTP_BAD_REQUEST);
         }
     }

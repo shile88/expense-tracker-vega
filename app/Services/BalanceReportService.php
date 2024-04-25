@@ -78,7 +78,7 @@ class BalanceReportService
 
             $allAccounts = array_merge($allAccounts, $userAccounts->toArray());
         }
-       
+
         return $allAccounts;
     }
 }

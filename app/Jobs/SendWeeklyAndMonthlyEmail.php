@@ -32,15 +32,15 @@ class SendWeeklyAndMonthlyEmail implements ShouldQueue
 
         foreach ($allAccounts as $account) {
             $user = User::find($account['user_id']);
-                $user->notify(new WeeklyOrMonthlyEmailNotification(
-                    $account['user_id'],
-                    $account['totalIncome'],
-                    $account['totalExpense'],
-                    $account['balance'],
-                    $account['id'],
-                    $account['type'],
-                    $account['totalIncome'] - $account['totalExpense']
-                ));
+            $user->notify(new WeeklyOrMonthlyEmailNotification(
+                $account['user_id'],
+                $account['totalIncome'],
+                $account['totalExpense'],
+                $account['balance'],
+                $account['id'],
+                $account['type'],
+                $account['totalIncome'] - $account['totalExpense']
+            ));
         }
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Observers;
 
 use App\Models\Expense;
-use App\Models\User;
 use App\Notifications\TotalExpenseBudgetExceeded;
 use App\Services\ExpenseService;
 
@@ -16,7 +15,7 @@ class ExpenseObserver
     {
         $this->handleExpenseBudgetExceeded($expense, $expenseService);
     }
-    
+
     /**
      * Handle the Expense "updated" event.
      */
