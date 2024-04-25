@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('saving_id')->constrained();
             $table->integer('amount');
             $table->string('month');
+            $table->boolean('is_completed')->default(false);
             $table->softDeletes();
             $table->timestamps();
         });

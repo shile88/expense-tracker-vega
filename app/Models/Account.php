@@ -33,4 +33,9 @@ class Account extends Model
     {
         return $this->hasMany(ExpenseGroup::class);
     }
+
+    public function savings(): HasMany
+    {
+        return $this->hasMany(Saving::class);
+    }
 }
