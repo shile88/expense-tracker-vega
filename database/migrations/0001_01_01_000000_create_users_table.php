@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->boolean('is_admin')->nullable()->default(0);
             $table->enum('type', ['basic', 'premium'])->default('basic');
+            $table->boolean('reminder')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\StoreReminderRequest;
 use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserRegisterRequest;
+use App\Models\Account;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -71,5 +73,19 @@ class UserController extends Controller
             'success' => true,
             'message' => 'Logged out successfully',
         ], Response::HTTP_OK);
+    }
+
+    public function activateReminder(StoreReminderRequest $request, Account $account)
+    {
+        $validatedRequest = $request->validated();
+
+        $isReminderUpdated = $this->userService->activateReminder($validatedRequest);
+
+        if($isReminderUpdated) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Reminder updated successfully'
+            ]);
+        }
     }
 }

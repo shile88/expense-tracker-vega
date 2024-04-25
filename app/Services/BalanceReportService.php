@@ -11,6 +11,15 @@ class BalanceReportService
 {
     public function balanceReport($validatedRequest, Account $account)
     {
+        // $url = request()->url();
+        // $queryParams = request()->query();
+
+        // ksort($queryParams);
+
+        // $queryString = http_build_query($queryParams);
+
+        // $fullUrl = "{$url}?{$queryString}";
+
         $incomes = null;
         $expenses = null;
 
@@ -35,7 +44,7 @@ class BalanceReportService
 
         $expenseGroupBudget = $expense->expenseGroup->group_budget;
 
-        if ($expensesSum >= $expenseGroupBudget) {
+        if ($expenseGroupBudget !== 0 && $expensesSum >= $expenseGroupBudget) {
             return [$expensesSum, $expenseGroupBudget];
         }
 
@@ -54,7 +63,7 @@ class BalanceReportService
 
         $allAccounts = [];
 
-        $users = User::where('type', 'premium')->with('accounts.incomeGroups.incomes', 'accounts.expenseGroups.expenses')->get();
+        $users = User::where('type', 'premium')->where('reminder', 1)->with('accounts.incomeGroups.incomes', 'accounts.expenseGroups.expenses')->get();
 
         foreach ($users as $user) {
             $userAccounts = $user->accounts->map(function ($account) use ($startDate, $endDate) {

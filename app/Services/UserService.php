@@ -55,4 +55,9 @@ class UserService
 
         Log::info('User log out', ['user' => auth()->id()]);
     }
+
+    public function activateReminder($validatedRequest)
+    {
+        auth()->user()->update($validatedRequest);
+    }
 }
