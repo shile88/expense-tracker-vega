@@ -18,7 +18,7 @@ class ExpenseGroupResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'group_budget' => $this->group_budget,
-            'account' => AccountResource::make($this->account)
+            'account' => AccountResource::make($this->account),
         ];
     }
 }

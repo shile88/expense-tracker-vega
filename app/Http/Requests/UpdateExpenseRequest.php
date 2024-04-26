@@ -30,7 +30,7 @@ class UpdateExpenseRequest extends FormRequest
             'transaction_start' => [
                 'nullable',
                 'integer',
-                new TransactionStartRule()
+                new TransactionStartRule(),
             ],
         ];
     }

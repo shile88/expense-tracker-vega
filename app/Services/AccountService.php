@@ -3,13 +3,11 @@
 namespace App\Services;
 
 use App\Models\Account;
-use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
 
 class AccountService
 {
-
     public function index(): LengthAwarePaginator
     {
         return Account::where('user_id', auth()->id())->paginate(5);
@@ -19,7 +17,7 @@ class AccountService
     {
         $newAccount = Account::create([
             'user_id' => auth()->id(),
-            ...$validatedRequest
+            ...$validatedRequest,
         ]);
 
         Log::info('User successfully created account', ['user' => auth()->id(), 'account' => $newAccount->id]);

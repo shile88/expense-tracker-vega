@@ -8,14 +8,12 @@ use App\Models\IncomeGroup;
 use App\Models\User;
 use Database\Seeders\ScheduleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-
-use function PHPUnit\Framework\assertNull;
 
 class IncomeTest extends TestCase
 {
     use RefreshDatabase;
+
     /**
      * A basic feature test example.
      */
@@ -26,12 +24,12 @@ class IncomeTest extends TestCase
         $incomeGroup = IncomeGroup::factory()->create();
 
         $response = $this->actingAs($user)->getJson("api/accounts/$account->id/income-groups/$incomeGroup->id/incomes");
-        
+
         $response->assertStatus(200);
         $response->assertExactJson([
             'success' => true,
             'message' => 'No income data.',
-            'data' => []
+            'data' => [],
         ]);
     }
 
@@ -51,8 +49,8 @@ class IncomeTest extends TestCase
             'message',
             'data' => [
                 'incomes',
-                'pagination'
-            ]
+                'pagination',
+            ],
         ]);
     }
 
@@ -74,13 +72,13 @@ class IncomeTest extends TestCase
             [
                 'income_group_id' => $incomeData['income_group_id'],
                 'amount' => $incomeData['amount'],
-                'schedule_id' => $incomeData['schedule_id']
+                'schedule_id' => $incomeData['schedule_id'],
             ]
         );
         $response->assertJsonStructure([
             'success',
             'message',
-            'data'
+            'data',
         ]);
     }
 
@@ -98,7 +96,7 @@ class IncomeTest extends TestCase
         $response->assertJsonStructure([
             'success',
             'message',
-            'data'
+            'data',
         ]);
     }
 
@@ -117,11 +115,11 @@ class IncomeTest extends TestCase
 
         $response->assertStatus(200);
         $incomeData = $response->json('data');
-        $this->assertDatabaseHas('incomes',['amount' => $incomeData['amount']]);
+        $this->assertDatabaseHas('incomes', ['amount' => $incomeData['amount']]);
         $response->assertJsonStructure([
             'success',
             'message',
-            'data'
+            'data',
         ]);
     }
 

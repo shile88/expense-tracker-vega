@@ -9,12 +9,8 @@ use App\Models\Account;
 use App\Models\Income;
 use App\Models\IncomeGroup;
 use App\Services\IncomeService;
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 
@@ -23,6 +19,7 @@ class IncomeController extends Controller
     public function __construct(protected IncomeService $incomeService)
     {
     }
+
     /**
      * Display a listing of the resource.
      */
@@ -30,12 +27,13 @@ class IncomeController extends Controller
     {
         $allIncomes = $this->incomeService->index($account, $incomeGroup);
 
-        if ($allIncomes->isEmpty())
+        if ($allIncomes->isEmpty()) {
             return response()->json([
                 'success' => true,
                 'message' => 'No income data.',
-                'data' => []
+                'data' => [],
             ], Response::HTTP_OK);
+        }
 
         return response()->json([
             'success' => true,
@@ -46,9 +44,9 @@ class IncomeController extends Controller
                     'total' => $allIncomes['total'],
                     'per_page' => $allIncomes['perPage'],
                     'current_page' => $allIncomes['currentPage'],
-                    'last_page' => $allIncomes['lastPage']
-                ]
-            ]
+                    'last_page' => $allIncomes['lastPage'],
+                ],
+            ],
         ], Response::HTTP_OK);
     }
 
@@ -65,12 +63,13 @@ class IncomeController extends Controller
 
         $newIncome = $this->incomeService->store($validatedRequest, $incomeGroup);
 
-        if ($newIncome)
+        if ($newIncome) {
             return response()->json([
                 'success' => true,
                 'message' => 'Income created successfully',
-                'data' => $newIncome
+                'data' => $newIncome,
             ], Response::HTTP_CREATED);
+        }
     }
 
     /**
@@ -83,7 +82,7 @@ class IncomeController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Your income.',
-            'data' => IncomeResource::make($income)
+            'data' => IncomeResource::make($income),
         ], Response::HTTP_OK);
     }
 
@@ -101,7 +100,7 @@ class IncomeController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Income updated successfully',
-            'data' => IncomeResource::make($updatedIncome)
+            'data' => IncomeResource::make($updatedIncome),
         ], Response::HTTP_OK);
     }
 
@@ -116,7 +115,7 @@ class IncomeController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => "Income with id:$income->id delete successfully"
+            'message' => "Income with id:$income->id delete successfully",
         ], Response::HTTP_OK);
     }
 }

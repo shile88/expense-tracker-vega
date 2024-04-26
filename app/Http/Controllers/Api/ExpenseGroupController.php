@@ -9,16 +9,17 @@ use App\Models\Account;
 use App\Models\ExpenseGroup;
 use App\Services\ExpenseGroupService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 
 class ExpenseGroupController
 {
     public function __construct(protected ExpenseGroupService $expenseGroupService)
     {
-        
+
     }
+
     /**
      * Display a listing of the resource.
      */
@@ -26,7 +27,7 @@ class ExpenseGroupController
     {
         $expenseGroup = $this->expenseGroupService->index($account);
 
-        if ($expenseGroup)
+        if ($expenseGroup) {
             return response()->json([
                 'success' => true,
                 'message' => 'All expense groups for account.',
@@ -36,16 +37,17 @@ class ExpenseGroupController
                         'total' => $expenseGroup['total'],
                         'per_page' => $expenseGroup['perPage'],
                         'current_page' => $expenseGroup['currentPage'],
-                        'last_page' => $expenseGroup['lastPage']
-                    ]
-                ]
+                        'last_page' => $expenseGroup['lastPage'],
+                    ],
+                ],
             ], Response::HTTP_OK);
-        else
+        } else {
             return response()->json([
                 'success' => true,
                 'message' => 'No expense groups for this account.',
-                'data' => []
+                'data' => [],
             ], Response::HTTP_NO_CONTENT);
+        }
     }
 
     /**
@@ -53,6 +55,8 @@ class ExpenseGroupController
      */
     public function store(StoreExpenseGroupRequest $request, Account $account): JsonResponse
     {
+        Gate::authorize('create', [ExpenseGroup::class, $request]);
+
         $validatedRequest = $request->validated();
 
         Log::info('User is trying to create expense group with validated data', ['user_id' => auth()->id(), 'data' => $validatedRequest]);
@@ -62,7 +66,7 @@ class ExpenseGroupController
         return response()->json([
             'success' => true,
             'message' => 'Expense groupe created.',
-            'data' => ExpenseGroupResource::make($newExpenseGroup)
+            'data' => ExpenseGroupResource::make($newExpenseGroup),
         ], Response::HTTP_CREATED);
     }
 
@@ -76,7 +80,7 @@ class ExpenseGroupController
         return response()->json([
             'success' => true,
             'message' => 'Your expense group.',
-            'data' => ExpenseGroupResource::make($expenseGroup)
+            'data' => ExpenseGroupResource::make($expenseGroup),
         ], Response::HTTP_OK);
     }
 
@@ -85,14 +89,16 @@ class ExpenseGroupController
      */
     public function update(UpdateExpenseGroupRequest $request, Account $account, ExpenseGroup $expenseGroup)
     {
+        Gate::authorize('update', [ExpenseGroup::class, $request]);
+
         $validatedRequest = $request->validated();
-       
+
         $updatedExpenseGroup = $this->expenseGroupService->update($validatedRequest, $expenseGroup);
 
         return response()->json([
             'success' => true,
             'message' => 'Updated successfully',
-            'data' => ExpenseGroupResource::make($updatedExpenseGroup)
+            'data' => ExpenseGroupResource::make($updatedExpenseGroup),
         ], Response::HTTP_OK);
     }
 
@@ -108,7 +114,7 @@ class ExpenseGroupController
         return response()->json([
             'success' => true,
             'message' => "Expense group with id:$expenseGroup->id delete successfully",
-            'data' => []
+            'data' => [],
         ], Response::HTTP_OK);
     }
 }

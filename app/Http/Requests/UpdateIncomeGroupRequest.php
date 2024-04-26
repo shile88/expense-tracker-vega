@@ -23,7 +23,7 @@ class UpdateIncomeGroupRequest extends FormRequest
     public function rules(): array
     {
         $incomeGroup = $this->route('income_group');
-      
+
         return [
             'name' => [
                 'required',

@@ -23,7 +23,7 @@ class UpdateExpenseGroupRequest extends FormRequest
     public function rules(): array
     {
         $expenseGroup = $this->route('expense_group');
-      
+
         return [
             'name' => [
                 'required',
@@ -31,7 +31,7 @@ class UpdateExpenseGroupRequest extends FormRequest
                 'alpha',
                 Rule::unique('expense_groups', 'name')->ignore($expenseGroup->id),
             ],
-            'group_budget' => 'nullable|integer|min:10'
+            'group_budget' => 'nullable|integer|min:10',
         ];
     }
 }

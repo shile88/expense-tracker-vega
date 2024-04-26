@@ -5,14 +5,14 @@ namespace Tests\Feature;
 use App\Events\UserRegistered;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class UserTest extends TestCase
 {
-   use RefreshDatabase;
+    use RefreshDatabase;
+
     /**
      * A basic feature test example.
      */
@@ -24,7 +24,7 @@ class UserTest extends TestCase
             'id' => 1,
             'name' => 'Milos',
             'email' => 'test@email.com',
-            'password' => '12345678'
+            'password' => '12345678',
         ];
 
         $response = $this->postJson('api/register', $user);
@@ -42,13 +42,13 @@ class UserTest extends TestCase
         ]);
     }
 
-    public function test_missing_parameter_to_register_new_user(): void 
+    public function test_missing_parameter_to_register_new_user(): void
     {
         $user = [
             'id' => 1,
             'name' => 'Milos',
             'email' => '',
-            'password' => '12345678'
+            'password' => '12345678',
         ];
 
         $response = $this->postJson('api/register', $user);
@@ -61,10 +61,10 @@ class UserTest extends TestCase
         $user = User::create([
             'name' => 'Milos',
             'email' => 'test@test.com',
-            'password' => Hash::make('password')
+            'password' => Hash::make('password'),
         ]);
 
-        $response = $this->postJson('api/login', ['email' =>'test@test.com', 'password' => 'password']);
+        $response = $this->postJson('api/login', ['email' => 'test@test.com', 'password' => 'password']);
 
         $response->assertStatus(200);
         $response->assertJsonStructure([
@@ -72,7 +72,7 @@ class UserTest extends TestCase
             'message',
             'data' => [
                 'user',
-                'access_token'
+                'access_token',
             ],
         ]);
     }
@@ -82,10 +82,10 @@ class UserTest extends TestCase
         $user = User::create([
             'name' => 'Milos',
             'email' => 'test@test.com',
-            'password' => Hash::make('password')
+            'password' => Hash::make('password'),
         ]);
 
-        $response = $this->postJson('api/login', ['email' =>'test2@test.com', 'password' => 'password']);
+        $response = $this->postJson('api/login', ['email' => 'test2@test.com', 'password' => 'password']);
 
         $response->assertStatus(422);
         $response->assertJsonStructure([
@@ -99,7 +99,7 @@ class UserTest extends TestCase
         $user = User::create([
             'name' => 'Milos',
             'email' => 'test@test.com',
-            'password' => Hash::make('password')
+            'password' => Hash::make('password'),
         ]);
 
         $response = $this->actingAs($user)->postJson('api/logout');

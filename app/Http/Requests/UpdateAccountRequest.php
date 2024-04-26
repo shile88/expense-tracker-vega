@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Http\Middleware\CheckIsPremiumUser;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateAccountRequest extends FormRequest
@@ -11,7 +12,7 @@ class UpdateAccountRequest extends FormRequest
      */
     public function authorize(): bool
     {
-      return true;
+        return true;
     }
 
     /**
@@ -23,9 +24,10 @@ class UpdateAccountRequest extends FormRequest
     {
         return [
             'balance' => 'nullable|integer',
-            'expense_end_date' => 'nullable|date|after_or_equal:today',
-            'expense_budget' => 'nullable|integer|min:10',
-            'type' => 'nullable|string|in:checking,savings,business'
+            'expense_start_date' => ['nullable', 'date', 'after_or_equal:today', new CheckIsPremiumUser],
+            'expense_end_date' => ['nullable', 'date', 'after_or_equal:expense_start_date', new CheckIsPremiumUser],
+            'expense_budget' => ['nullable', 'integer', 'min:10', new CheckIsPremiumUser],
+            'type' => 'nullable|string|in:checking,savings,business',
         ];
     }
 }

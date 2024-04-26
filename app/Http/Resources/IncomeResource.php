@@ -14,12 +14,13 @@ class IncomeResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+
         return [
             'id' => $this->id,
             'amount' => $this->amount,
             'schedule' => ScheduleResource::make($this->schedule),
             'income_group' => IncomeGroupResource::make($this->incomeGroup),
-            'income_date' => $this->income_date
+            'end_date' => $this->end_date,
         ];
     }
 }

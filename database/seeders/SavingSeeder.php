@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Saving;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class SavingSeeder extends Seeder

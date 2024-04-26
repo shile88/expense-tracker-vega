@@ -6,15 +6,12 @@ use App\Models\Account;
 use App\Models\IncomeGroup;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
-
-use function PHPUnit\Framework\assertNull;
 
 class IncomeGroupTest extends TestCase
 {
     use RefreshDatabase;
+
     /**
      * A basic feature test example.
      */
@@ -29,7 +26,7 @@ class IncomeGroupTest extends TestCase
         $response->assertExactJson([
             'success' => true,
             'message' => 'No income groups for this account.',
-            'data' => []
+            'data' => [],
         ]);
     }
 
@@ -47,12 +44,12 @@ class IncomeGroupTest extends TestCase
             'message',
             'data' => [
                 'income_groups',
-                'pagination'
-            ]
+                'pagination',
+            ],
         ]);
     }
 
-    public function test_create_new_income_group_for_auth_user_account(): void 
+    public function test_create_new_income_group_for_auth_user_account(): void
     {
         $user = User::factory()->create();
         $account = Account::factory()->create();
@@ -62,15 +59,15 @@ class IncomeGroupTest extends TestCase
         $response->assertStatus(201);
         $incomeGroupData = $response->json('data');
         $this->assertNotNull($incomeGroupData);
-        $this->assertDatabaseHas('income_groups', ['id'=> $incomeGroupData['id'], 'account_id' => $incomeGroupData['account_id'], 'name' => $incomeGroupData['name']]);
+        $this->assertDatabaseHas('income_groups', ['id' => $incomeGroupData['id'], 'account_id' => $incomeGroupData['account_id'], 'name' => $incomeGroupData['name']]);
         $response->assertJsonStructure([
             'success',
             'message',
-            'data'
+            'data',
         ]);
     }
 
-    public function test_show_one_income_group_for_auth_user_account(): void 
+    public function test_show_one_income_group_for_auth_user_account(): void
     {
         $user = User::factory()->create();
         $account = Account::factory()->create();
@@ -82,7 +79,7 @@ class IncomeGroupTest extends TestCase
         $response->assertJsonStructure([
             'success',
             'message',
-            'data'
+            'data',
         ]);
     }
 
@@ -93,15 +90,15 @@ class IncomeGroupTest extends TestCase
         $incomeGroup = IncomeGroup::factory()->create();
 
         $response = $this->actingAs($user)->patchJson("api/accounts/$account->id/income-groups/$incomeGroup->id", ['name' => 'soping']);
-        
+
         $response->assertStatus(200);
         $incomeGroupData = $response->json('data');
         $this->assertNotNull($incomeGroupData);
-        $this->assertDatabaseHas('income_groups', ['id'=> $incomeGroupData['id'], 'account_id' => $incomeGroupData['account_id'], 'name' => $incomeGroupData['name']]);
+        $this->assertDatabaseHas('income_groups', ['id' => $incomeGroupData['id'], 'account_id' => $incomeGroupData['account_id'], 'name' => $incomeGroupData['name']]);
         $response->assertJsonStructure([
             'success',
             'message',
-            'data'
+            'data',
         ]);
     }
 
@@ -117,7 +114,7 @@ class IncomeGroupTest extends TestCase
         $this->assertSoftDeleted($incomeGroup);
         $response->assertJsonStructure([
             'success',
-            'message'
+            'message',
         ]);
     }
 }

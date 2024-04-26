@@ -5,15 +5,12 @@ namespace Tests\Feature;
 use App\Models\Account;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
-
-use function PHPUnit\Framework\assertNull;
 
 class AccountTest extends TestCase
 {
     use RefreshDatabase;
+
     /**
      * A basic feature test example.
      */
@@ -31,7 +28,7 @@ class AccountTest extends TestCase
             'message',
             'data' => [
                 'accounts',
-                'pagination'
+                'pagination',
             ],
         ]);
     }
@@ -45,15 +42,15 @@ class AccountTest extends TestCase
         $response->assertStatus(201);
         $accountData = $response->json('data');
         $this->assertNotNull($accountData);
-        $this->assertDatabaseHas('accounts', ['id'=> $accountData['id'], 'user_id' => $accountData['user']['id']]);
+        $this->assertDatabaseHas('accounts', ['id' => $accountData['id'], 'user_id' => $accountData['user']['id']]);
         $response->assertJsonStructure([
             'success',
             'message',
-            'data'
+            'data',
         ]);
     }
 
-    public function test_missing_parameter_to_create_new_account_for_auth_user(): void 
+    public function test_missing_parameter_to_create_new_account_for_auth_user(): void
     {
         $user = User::factory()->create();
 
@@ -73,11 +70,11 @@ class AccountTest extends TestCase
         $response->assertJsonStructure([
             'success',
             'message',
-            'data'
+            'data',
         ]);
     }
 
-    public function test_update_account_for_auth_user(): void 
+    public function test_update_account_for_auth_user(): void
     {
         $user = User::factory()->create();
         $account = Account::factory()->create();
@@ -92,12 +89,12 @@ class AccountTest extends TestCase
             'success',
             'message',
             'data' => [
-                'account'
-            ]
+                'account',
+            ],
         ]);
     }
 
-    public function test_delete_account_for_auth_user(): void 
+    public function test_delete_account_for_auth_user(): void
     {
         $user = User::factory()->create();
         $account = Account::factory()->create();
@@ -108,7 +105,7 @@ class AccountTest extends TestCase
         $this->assertSoftDeleted($account);
         $response->assertJsonStructure([
             'success',
-            'message'
+            'message',
         ]);
     }
 }

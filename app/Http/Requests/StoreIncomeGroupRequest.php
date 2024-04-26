@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Account;
-use App\Models\IncomeGroup;
 use App\Rules\UniqueNameForAccountId;
 use Illuminate\Foundation\Http\FormRequest;
 
